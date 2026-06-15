@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vincent Aaron B. Vicente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .gradient-dark {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        .gradient-accent {
+            background: linear-gradient(135deg, #0f3460 0%, #1a5f7a 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(15, 52, 96, 0.3);
+        }
+        
+        .text-glow {
+            text-shadow: 0 0 20px rgba(15, 52, 96, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-gray-100">
+    <!-- Nav Bar -->
+    <nav class="fixed top-0 w-full bg-slate-950 bg-opacity-95 backdrop-blur-md border-b border-slate-800 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-teal-400 to-blue-500 bg-clip-text text-transparent">Vincent Aaron B. Vicente</h1>
+            <ul class="flex gap-8">
+                <li><a href="#home" class="text-gray-300 hover:text-teal-400 transition duration-300">Home</a></li>
+                <li><a href="#about" class="text-gray-300 hover:text-teal-400 transition duration-300">About</a></li>
+                <li><a href="#skills" class="text-gray-300 hover:text-teal-400 transition duration-300">Skills</a></li>
+                <li><a href="#projects" class="text-gray-300 hover:text-teal-400 transition duration-300">Projects</a></li>
+                <li><a href="#contact" class="text-gray-300 hover:text-teal-400 transition duration-300">Contact</a></li>
+                <li><a href="#resume" class="text-gray-300 hover:text-teal-400 transition duration-300">Resume</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="pt-32 pb-20 gradient-dark">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <!-- COMMENT: Replace "Your Name" with your actual name -->
+            <h2 class="text-6xl font-bold mb-4 text-white">Vincent Aaron B. Vicente</h2>
+            
+            <!-- COMMENT: Replace "Your Professional Title" with your actual title/role -->
+            <p class="text-2xl mb-6 text-teal-400 font-light"> Developer</p>
+            
+            <!-- COMMENT: Replace the description with your actual professional summary -->
+            <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-8 leading-relaxed">
+                Welcome to my portfolio. I'm a creative professional passionate about building beautiful and functional digital experiences. 
+                Let's create something extraordinary together.
+            </p>
+            
+            <!-- COMMENT: Update the href with your actual contact email or change the action -->
+            <a href="mailto:vincent4aron@gmail.com" class="inline-block bg-gradient-to-r from-teal-400 to-blue-500 text-slate-900 font-bold py-3 px-8 rounded-lg hover:shadow-lg hover:shadow-teal-500/50 transition duration-300">
+                Let's Work Together
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-slate-800 bg-opacity-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <h3 class="text-4xl font-bold text-white mb-12 text-center">About Me</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <img src="Profile.png" 
+                         alt="Profile Photo" class="rounded-lg shadow-2xl shadow-teal-500/20 border border-slate-700">
+                </div>
+
+                <!-- About Text -->
+                <div>
+                    <p class="text-gray-300 text-lg leading-relaxed mb-4">
+                        Hi! I'm an aspiring developer with hands-on experience in building web and mobile applications using technologies like Java, React, Laravel and MySQL. 
+                        I enjoy creating functional and user-friendly systems with focus on practical solutions.
+                    </p>
+
+                    <p class="text-gray-300 text-lg leading-relaxed mb-4">
+                        My journey in programming started with curiosity and has grown into a passion for full-stack development and problem-solving. I continuously work on improving my skills through personal projects such as inventory systems and Android applications, while also exploring modern web development tools and frameworks.
+                    </p>
+
+                    <div class="mt-8">
+                        <h4 class="text-xl font-bold text-teal-400 mb-4">Key Highlights</h4>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-center"><span class="text-teal-400 mr-3">▸</span> Built a full-stack Inventory Management System using Laravel and React</li>
+                            <li class="flex items-center"><span class="text-teal-400 mr-3">▸</span> Developed a Barangay Adjudication System using PHP and MySQL</li>
+                            <li class="flex items-center"><span class="text-teal-400 mr-3">▸</span> Experience in REST API development and database design</li>
+                            <li class="flex items-center"><span class="text-teal-400 mr-3">▸</span> Strong foundation in problem-solving, debugging, and clean code practices</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 gradient-dark">
+        <div class="max-w-6xl mx-auto px-6">
+            <h3 class="text-4xl font-bold text-white mb-12 text-center">Skills & Expertise</h3>
+            
+                <div class="card-hover bg-slate-800 bg-opacity-60 border border-slate-700 p-8 rounded-lg backdrop-blur">
+                    <h4 class="text-xl font-bold text-teal-400 mb-4">Frontend Development</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-center text-gray-300">
+                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span> HTML/CSS
+                        </li>
+                        <li class="flex items-center text-gray-300">
+                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span> JavaScript
+                        </li>
+                        <li class="flex items-center text-gray-300">
+                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span> React
+                        </li>
+                        <li class="flex items-center text-gray-300">
+                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span> Tailwind CSS
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-hover bg-slate-800 bg-opacity-60 border border-slate-700 p-8 rounded-lg backdrop-blur">
+                    <h4 class="text-xl font-bold text-teal-400 mb-4">Backend Development</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-center text-gray-300">
+                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span> PHP
+                        </li>
+                        <li class="flex items-center text-gray-300">
+                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span> Laravel
+                        </li>
+                        <li class="flex items-center text-gray-300">
+                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span> Database Design
+                        </li>
+                        <li class="flex items-center text-gray-300">
+                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span> REST APIs
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Skill Category 3 -->
+                <div class="card-hover bg-slate-800 bg-opacity-60 border border-slate-700 p-8 rounded-lg backdrop-blur">
+                    <h4 class="text-xl font-bold text-teal-400 mb-4">Tools</h4>
+                    <ul class="space-y-3">
+                        <!-- COMMENT: Replace each skill name with your actual skills -->
+                        <li class="flex items-center text-gray-300">
+                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span> Github
+                        </li>
+                        <li class="flex items-center text-gray-300">
+                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span> VS Code
+                        </li>
+                        <li class="flex items-center text-gray-300">
+                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span> NetBeans
+                        </li>
+                        <li class="flex items-center text-gray-300">
+                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span> Android Studio
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-slate-800 bg-opacity-30">
+        <div class="max-w-6xl mx-auto px-6">
+            <h3 class="text-4xl font-bold text-white mb-12 text-center">Featured Projects</h3>
+
+            <!-- COMMENT: Duplicate this entire project card div to add more projects. Update project details each time -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Project Card 1 -->
+                <div class="card-hover bg-slate-800 border border-slate-700 rounded-lg overflow-hidden backdrop-blur">
+                    <img src="BPAMIS.png" 
+                         alt="BPAMIS" class="w-full h-48 object-cover">
+                    
+                    <div class="p-6">
+                        <h4 class="text-2xl font-bold text-white mb-2">Barangay Panducot Adjudicatio Management Information System</h4>
+                        <p class="text-gray-400 text-sm mb-4">
+                            A web-based application designed to streamline the adjudication process for Barangay Panducot. 
+                            It allows users to submit and track their cases online, while providing barangay officials with an efficient way to manage and resolve disputes.
+                        </p>
+                        <a href="https://Bp4mis.liveblog365.com" target="_blank" rel="noopener noreferrer" class="text-teal-400 hover:text-teal-300 font-semibold flex items-center transition">
+                            View Project →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <!-- <div class="card-hover bg-slate-800 border border-slate-700 rounded-lg overflow-hidden backdrop-blur">
+                    <img src="BPAMIS.png" 
+                         alt="BPAMIS" class="w-full h-48 object-cover">
+                    
+                    <div class="p-6">
+                        <h4 class="text-2xl font-bold text-white mb-2">Barangay Panducot Adjudicatio Management Information System</h4>
+                        <p class="text-gray-400 text-sm mb-4">
+                            A web-based application designed to streamline the adjudication process for Barangay Panducot. 
+                            It allows users to submit and track their cases online, while providing barangay officials with an efficient way to manage and resolve disputes.
+                        </p>
+                        <a href="https://Bp4mis.liveblog365.com" class="text-teal-400 hover:text-teal-300 font-semibold flex items-center transition">
+                            View Project →
+                        </a>
+                    </div>
+                </div> -->
+
+                <!-- Project Card 3 -->
+                <!-- <div class="card-hover bg-slate-800 border border-slate-700 rounded-lg overflow-hidden backdrop-blur">
+                    <img src="BPAMIS.png" 
+                         alt="BPAMIS" class="w-full h-48 object-cover">
+                    
+                    <div class="p-6">
+                        <h4 class="text-2xl font-bold text-white mb-2">Barangay Panducot Adjudicatio Management Information System</h4>
+                        <p class="text-gray-400 text-sm mb-4">
+                            A web-based application designed to streamline the adjudication process for Barangay Panducot. 
+                            It allows users to submit and track their cases online, while providing barangay officials with an efficient way to manage and resolve disputes.
+                        </p>
+                        <a href="https://Bp4mis.liveblog365.com" class="text-teal-400 hover:text-teal-300 font-semibold flex items-center transition">
+                            View Project →
+                        </a>
+                    </div>
+                </div> -->
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 gradient-dark">
+        <div class="max-w-6xl mx-auto px-6">
+            <h3 class="text-4xl font-bold text-white mb-12 text-center">Get In Touch</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <!-- Email Contact -->
+                <div class="text-center">
+                    <div class="text-5xl mb-4">📧</div>
+                    <h4 class="text-xl font-bold text-teal-400 mb-2">Email</h4>
+                    <p class="text-gray-300"><a href="mailto:vincent4aron@gmail.com" class="text-teal-400 hover:text-teal-300 transition">vincent4aron@gmail.com</a></p>
+                </div>
+
+                <!-- Phone Contact -->
+                <div class="text-center">
+                    <div class="text-5xl mb-4">📱</div>
+                    <h4 class="text-xl font-bold text-teal-400 mb-2">Phone</h4>
+                    <p class="text-gray-300"><a href="tel:+63 923 621 1657" class="text-teal-400 hover:text-teal-300 transition">+63 923 621 1657</a></p>
+                </div>
+
+                <!-- Location Contact -->
+                <div class="text-center">
+                    <div class="text-5xl mb-4">📍</div>
+                    <h4 class="text-xl font-bold text-teal-400 mb-2">Location</h4>
+                    <p class="text-gray-300">Bulacan, Philippines</p>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <!-- <div class="max-w-2xl mx-auto bg-slate-800 bg-opacity-60 border border-slate-700 p-8 rounded-lg backdrop-blur">
+            
+                <form action="mailto:your.email@example.com" method="POST">
+                    <div class="mb-6">
+                       
+                        <label for="name" class="block text-gray-300 font-bold mb-2">Name</label>
+                        <input type="text" id="name" name="name" class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 transition" placeholder="Your Name" required>
+                    </div>
+
+                    <div class="mb-6">
+                      
+                        <label for="email" class="block text-gray-300 font-bold mb-2">Email</label>
+                        <input type="email" id="email" name="email" class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 transition" placeholder="your.email@example.com" required>
+                    </div>
+
+                    <div class="mb-6">
+                        
+                        <label for="subject" class="block text-gray-300 font-bold mb-2">Subject</label>
+                        <input type="text" id="subject" name="subject" class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 transition" placeholder="Subject" required>
+                    </div>
+
+                    <div class="mb-6">
+                       
+                        <label for="message" class="block text-gray-300 font-bold mb-2">Message</label>
+                        <textarea id="message" name="message" rows="5" class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 transition" placeholder="Your message here..." required></textarea>
+                    </div>
+
+                    
+                    <button type="submit" class="w-full bg-gradient-to-r from-teal-400 to-blue-500 text-slate-900 font-bold py-3 rounded-lg hover:shadow-lg hover:shadow-teal-500/50 transition duration-300">
+                        Send Message
+                    </button>
+                </form>
+            </div> -->
+        </div>
+    </section>
+
+    <section id="resume" class="py-20 gradient-dark">
+        <!-- Resume Download Button-->
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <a href="Vicente_Vincent_Aaron_Resume.pdf" download class="inline-block bg-gradient-to-r from-teal-400 to-blue-500 text-slate-900 font-bold py-3 px-8 rounded-lg hover:shadow-lg hover:shadow-teal-500/50 transition duration-300">
+                Download Resume
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800 text-gray-300 py-8">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <!-- Footer Links -->
+                <div>
+                    <h4 class="text-lg font-bold text-teal-400 mb-4">Vincent Aaron</h4>
+                    <p class="text-gray-400">Aspiring Full-Stack Developer focused on building clean, efficient, and user-friendly applications.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-bold text-teal-400 mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#home" class="hover:text-teal-400 transition">Home</a></li>
+                        <li><a href="#about" class="hover:text-teal-400 transition">About</a></li>
+                        <li><a href="#projects" class="hover:text-teal-400 transition">Projects</a></li>
+                        <li><a href="#contact" class="hover:text-teal-400 transition">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Social Links -->
+                <div>
+                    <h4 class="text-lg font-bold text-teal-400 mb-4">Follow Me</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <!-- COMMENT: Replace the href values with your actual social media profiles -->
+                        <li><a href="#" class="hover:text-teal-400 transition">LinkedIn</a></li>
+                        <li><a href="#" class="hover:text-teal-400 transition">GitHub</a></li>
+                        <li><a href="#" class="hover:text-teal-400 transition">Twitter</a></li>
+                        <li><a href="#" class="hover:text-teal-400 transition">Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-t border-slate-800 pt-8 text-center text-gray-500">
+                <p>&copy; 2026 Vincent Aaron. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
