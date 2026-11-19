@@ -1,68 +1,44 @@
-# Project Portfolio
+# Vincent Aaron B. Vicente — Portfolio
 
-The personal portfolio website of **Vincent Aaron B. Vicente**, a developer from Bulacan, Philippines. It is a single responsive page that introduces me, lists my skills, showcases my projects with screenshots and links, and makes it easy to get in touch or download my resume.
+Personal portfolio site of **Vincent Aaron B. Vicente**, a BSIT graduate (Cum Laude) and web and software developer from Bulacan, Philippines.
+
+**Live site:** https://vincent-aaron.github.io/project-portfolio/
+
+A single `index.html` with no build step. It has light and dark themes, works on phones and desktops, is keyboard-accessible, and respects reduced-motion settings.
 
 ## Sections
 
-- **Home** – introduction and a "Let's Work Together" email call-to-action
-- **About Me** – background, profile photo, and key highlights
-- **Skills & Expertise** – frontend, backend, and tools
-- **Projects** – cards with a screenshot, short description, tech stack, and links to the GitHub repo, README, and live demo (when available)
-- **Get In Touch** – email, phone, and location
-- **Resume** – downloadable PDF resume
+Hero (résumé download, GitHub) · tech ticker · 4 featured projects · filterable archive of more projects · experience and education timeline · skills · about · contact.
 
-## Featured Projects
+## Featured projects
 
-| Project | Stack | Repository | Live |
+| Project | Stack | Live demo | Source |
 | --- | --- | --- | --- |
-| Electro Galaxy | Next.js, TypeScript, Supabase | [electro-galaxy](https://github.com/vincent-aaron/electro-galaxy) | [electro-galaxy.vercel.app](https://electro-galaxy.vercel.app) |
-| Tech IMS | Python, Django, PostgreSQL | [tech-ims](https://github.com/vincent-aaron/tech-ims) | [tech-ims-azure.vercel.app](https://tech-ims-azure.vercel.app) |
-| Barangay Adjudication MIS | PHP, MySQL, JavaScript | [barangay-adjudication-mis](https://github.com/vincent-aaron/barangay-adjudication-mis) | [Live demo](https://bp4mis.liveblog365.com/bpamis_website/bpamis.php) |
-| Runebound | Unity, C# | [runebound](https://github.com/vincent-aaron/runebound) | [itch.io](https://zil30.itch.io/rune-bound) |
-| Titan Cruise | Java, Swing, Maven | [titan-cruise](https://github.com/vincent-aaron/titan-cruise) | – |
-| Elevating IQ | Java, Swing | [elevating-iq](https://github.com/vincent-aaron/elevating-iq) | – |
-| Simple Calc | Java, Swing | [simple-calc](https://github.com/vincent-aaron/simple-calc) | – |
+| Barangay Adjudication MIS | PHP, MySQL, JavaScript | [Live demo](https://bp4mis.liveblog365.com/bpamis_website/bpamis.php) | [barangay-adjudication-mis](https://github.com/vincent-aaron/barangay-adjudication-mis) |
+| Electro Galaxy | Next.js, TypeScript, Supabase | [electro-galaxy.vercel.app](https://electro-galaxy.vercel.app) | [electro-galaxy](https://github.com/vincent-aaron/electro-galaxy) |
+| Auto Apply | Web | – | [auto-apply](https://github.com/vincent-aaron/auto-apply) |
+| Tech IMS | Python, Django, PostgreSQL | [tech-ims-azure.vercel.app](https://tech-ims-azure.vercel.app) | [tech-ims](https://github.com/vincent-aaron/tech-ims) |
 
-## Tech Stack
+More projects (RuneBound, LogPose, Elevating IQ, Titan Cruise, CineMax, Simple Calc and others) are in the archive section of the site.
 
-| Layer | Technology |
-| --- | --- |
-| Markup | HTML5 |
-| Styling | Tailwind CSS (Play CDN) |
-| Hosting | Any static host (e.g. GitHub Pages) |
+## Editing projects
 
-No build step or dependencies are required.
+All project content lives in the `PROJECTS` array near the top of the `<script>` in `index.html`. Each entry has `github`, `live` and `image` fields. A **Live demo** button appears only when `live` is set, and a placeholder tile shows when `image` is empty.
 
-## Project Structure
+## Files
 
 ```
-project-portfolio/
-├── index.html                      # The whole site
-├── Profile.png                     # Profile photo
-├── BPAMIS.png                      # Barangay Adjudication MIS screenshot
-├── Vicente_Vincent_Aaron_Resume.pdf
-├── elevatingiq/                    # Elevating IQ screenshots
-├── runebound/                      # Runebound screenshots
-├── simple-calc/                    # Simple Calc screenshot
-└── titan cruise/                   # Titan Cruise screenshots
+index.html
+assets/
+  Vicente_Vincent_Aaron_Resume.pdf
+  profile.png
+  bpamis.png, electro-galaxy.png, tech-ims.png, runebound.jpg,
+  elevating-iq.jpg, titan-cruise.png, simple-calc.png
 ```
 
-## Running Locally
+## Run / deploy
 
-Open `index.html` in any browser, or serve the folder:
-
-```bash
-npx serve .
-# or
-python -m http.server 8000
-```
-
-## Deploying to GitHub Pages
-
-1. Push the repository to GitHub.
-2. Go to **Settings → Pages**.
-3. Set **Source** to *Deploy from a branch*, branch `main`, folder `/ (root)`.
-4. The site will be published at `https://vincent-aaron.github.io/project-portfolio/`.
+Open `index.html` in a browser, or serve the folder (`npx serve .` or `python -m http.server`). It is deployed with GitHub Pages from the `main` branch root.
 
 ## Contact
 
