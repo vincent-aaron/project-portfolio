@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>document.documentElement.classList.add('js');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ignition — Cars &amp; Motorcycles, Curated</title>
+<meta name="description" content="Ignition is a curated showroom for supercars, performance cars, EVs, classics and motorcycles. Filter, compare specs side by side, and book a test drive.">
+<meta name="theme-color" content="#0B0C0E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B0C0E'/%3E%3Cpath d='M18 4 8 18h7l-2 10 11-15h-7z' fill='%23FF5A1F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="images/hero-911-snow.jpg">
+<style>
+  :root{
+    --bg:#0B0C0E; --bg-2:#111317; --panel:#16191E; --panel-2:#1C2026;
+    --line:rgba(242,241,236,.09); --line-2:rgba(242,241,236,.16);
+    --text:#F2F1EC; --muted:#9AA0A9; --dim:#6B717B;
+    --accent:#FF5A1F; --accent-2:#FFB13B; --ok:#3DDC97;
+    --ease:cubic-bezier(.19,1,.22,1);
+    --pad:clamp(1.25rem,4.5vw,3.5rem);
+    --max:1400px;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  section[id]{scroll-margin-top:72px}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{cursor:pointer;background:none;border:none}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+  ::selection{background:var(--accent);color:#fff}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .skip{position:absolute;left:1rem;top:-3rem;z-index:300;background:var(--accent);color:#fff;padding:.6rem 1rem;border-radius:8px;transition:top .2s}
+  .skip:focus{top:1rem}
+
+  .display{font-family:'Archivo',sans-serif;font-stretch:118%;font-weight:800;letter-spacing:-.02em;line-height:.95;text-transform:uppercase}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+  .block{padding:clamp(4rem,9vw,7.5rem) 0}
+  .head{display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem;flex-wrap:wrap;margin-bottom:2.4rem}
+  .head h2{font-size:clamp(2rem,4.6vw,3.6rem);margin-top:.6rem}
+  .head p{color:var(--muted);max-width:42ch;font-size:.95rem}
+
+  .btn{display:inline-flex;align-items:center;gap:.55rem;padding:.85rem 1.35rem;border-radius:999px;font-weight:600;font-size:.88rem;letter-spacing:.01em;transition:background .25s,color .25s,border-color .25s,transform .35s var(--ease)}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{background:#ff6e3a;transform:translateY(-2px)}
+  .btn-ghost{border:1px solid var(--line-2);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--text);transform:translateY(-2px)}
+  .btn svg{width:16px;height:16px}
+
+  /* reveal — hidden state only applies when JS is running */
+  html.js .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0s)}
+  html.js .reveal.in{opacity:1;transform:none}
+  .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.08em;margin-bottom:-.08em}
+  html.js .wi{display:inline-block;transform:translateY(110%);transition:transform 1s var(--ease);transition-delay:calc(var(--i)*.05s)}
+  html.js .split.in .wi{transform:none}
+
+  /* ---------- Nav ---------- */
+  .nav{position:fixed;inset:0 0 auto 0;z-index:100;transition:background .35s,border-color .35s,backdrop-filter .35s;border-bottom:1px solid transparent}
+  .nav.scrolled{background:rgba(11,12,14,.78);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-color:var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:68px;gap:1rem}
+  .logo{display:flex;align-items:center;gap:.55rem;font-family:'Archivo',sans-serif;font-stretch:125%;font-weight:800;font-size:1.05rem;letter-spacing:.06em}
+  .logo svg{width:22px;height:22px}
+  .links{display:flex;gap:2rem;font-size:.86rem;color:var(--muted)}
+  .links a{position:relative;padding:.3rem 0;transition:color .2s}
+  .links a::after{content:"";position:absolute;left:0;bottom:-2px;height:2px;width:0;background:var(--accent);transition:width .35s var(--ease)}
+  .links a:hover,.links a.active{color:var(--text)}
+  .links a:hover::after,.links a.active::after{width:100%}
+  .nav-cta{display:flex;gap:.6rem;align-items:center}
+  .menu-btn{display:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--line-2);align-items:center;justify-content:center}
+  .menu-btn span,.menu-btn span::before,.menu-btn span::after{display:block;width:16px;height:1.5px;background:var(--text);position:relative;transition:transform .3s var(--ease),background .2s}
+  .menu-btn span::before,.menu-btn span::after{content:"";position:absolute;left:0}
+  .menu-btn span::before{top:-5px}.menu-btn span::after{top:5px}
+  .menu-btn[aria-expanded="true"] span{background:transparent}
+  .menu-btn[aria-expanded="true"] span::before{transform:translateY(5px) rotate(45deg)}
+  .menu-btn[aria-expanded="true"] span::after{transform:translateY(-5px) rotate(-45deg)}
+  .mobile{display:none}
+  @media (max-width:900px){
+    .links,.nav-cta .btn{display:none}
+    .menu-btn{display:inline-flex}
+    .mobile{display:block;position:fixed;inset:68px 0 auto 0;z-index:99;background:rgba(11,12,14,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:1rem var(--pad) 1.6rem;transform:translateY(-120%);transition:transform .45s var(--ease);visibility:hidden}
+    .mobile.open{transform:none;visibility:visible}
+    .mobile a{display:block;padding:.9rem 0;border-bottom:1px solid var(--line);font-family:'Archivo',sans-serif;font-stretch:115%;font-weight:700;font-size:1.3rem;text-transform:uppercase}
+    .mobile .btn{margin-top:1.2rem;width:100%;justify-content:center}
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;height:100svh;min-height:620px;overflow:hidden;background:#000}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s var(--ease)}
+  .slide.active{opacity:1}
+  .slide img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);filter:brightness(.62) saturate(.95)}
+  .slide.active img{animation:kb 9s linear forwards}
+  @keyframes kb{from{transform:scale(1.08)}to{transform:scale(1)}}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,12,14,.55) 0%,rgba(11,12,14,0) 30%,rgba(11,12,14,.15) 55%,var(--bg) 100%),linear-gradient(90deg,rgba(11,12,14,.75) 0%,rgba(11,12,14,0) 60%);pointer-events:none}
+  .hero-in{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:clamp(2rem,6vh,4.5rem)}
+  .hero h1{font-size:clamp(2.9rem,9vw,8.2rem);max-width:11ch}
+  .hero h1 .accent{color:var(--accent)}
+  .hero-sub{margin-top:1.4rem;max-width:46ch;color:rgba(242,241,236,.82);font-size:clamp(1rem,1.4vw,1.12rem)}
+  .hero-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.8rem}
+  .hero-foot{display:grid;grid-template-columns:1fr auto;align-items:end;gap:2rem;margin-top:clamp(2rem,6vh,3.5rem);padding-top:1.4rem;border-top:1px solid var(--line-2)}
+  .stats{display:flex;gap:clamp(1.5rem,4vw,3.5rem);flex-wrap:wrap}
+  .stats b{display:block;font-family:'Archivo',sans-serif;font-stretch:110%;font-weight:800;font-size:clamp(1.5rem,2.6vw,2.2rem)}
+  .stats span{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .slide-ctrl{display:flex;flex-direction:column;align-items:flex-end;gap:.7rem;min-width:260px}
+  .slide-caption{font-size:.82rem;color:var(--muted);text-align:right;min-height:2.6em}
+  .slide-caption strong{display:block;color:var(--text);font-weight:600}
+  .dots{display:flex;gap:.45rem}
+  .dot{width:56px;height:24px;display:flex;align-items:center}
+  .dot i{display:block;width:100%;height:2px;background:var(--line-2);position:relative;overflow:hidden}
+  .dot i::after{content:"";position:absolute;inset:0;background:var(--text);transform:scaleX(0);transform-origin:left}
+  .dot.done i::after{transform:scaleX(1)}
+  .dot.active i::after{animation:fill var(--slide-ms,6500ms) linear forwards}
+  .hero.paused .dot.active i::after{animation-play-state:paused}
+  @keyframes fill{to{transform:scaleX(1)}}
+  @media (max-width:720px){.hero-foot{grid-template-columns:1fr}.slide-ctrl{align-items:flex-start;min-width:0}.slide-caption{text-align:left}}
+
+  /* ---------- Marquee ---------- */
+  .marquee{border-block:1px solid var(--line);overflow:hidden;padding:1.1rem 0;background:var(--bg-2)}
+  .track{display:flex;width:max-content;animation:mq 42s linear infinite}
+  .marquee:hover .track{animation-play-state:paused}
+  .track span{display:inline-flex;align-items:center;gap:2.2rem;padding-right:2.2rem;font-family:'Archivo',sans-serif;font-stretch:125%;font-weight:800;font-size:clamp(1.2rem,2.4vw,1.9rem);text-transform:uppercase;white-space:nowrap}
+  .track .o{color:transparent;-webkit-text-stroke:1px rgba(242,241,236,.45)}
+  .track .x{color:var(--accent);font-size:.6em}
+  @keyframes mq{to{transform:translateX(-50%)}}
+
+  /* ---------- Showroom ---------- */
+  .toolbar{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;margin-bottom:1.8rem;padding:1rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-2);position:sticky;top:76px;z-index:20}
+  .chips{display:flex;gap:.4rem;flex-wrap:wrap}
+  .chip{padding:.5rem .95rem;border-radius:999px;border:1px solid var(--line-2);font-size:.82rem;color:var(--muted);transition:all .25s}
+  .chip:hover{color:var(--text);border-color:var(--text)}
+  .chip[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .chip sup{font-family:'JetBrains Mono',monospace;font-size:.62rem;margin-left:.25rem;opacity:.7}
+  .tools{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+  .search{display:flex;align-items:center;gap:.5rem;border:1px solid var(--line-2);border-radius:999px;padding:.15rem .9rem;min-width:220px;transition:border-color .2s}
+  .search:focus-within{border-color:var(--accent)}
+  .search svg{width:15px;height:15px;color:var(--muted);flex:none}
+  .search input{background:none;border:none;outline:none;padding:.5rem 0;width:100%;font-size:.86rem}
+  .search input::placeholder{color:var(--dim)}
+  .select{appearance:none;background:var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239AA0A9' fill='none' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right .9rem center;border:1px solid var(--line-2);border-radius:999px;padding:.62rem 2.2rem .62rem .95rem;font-size:.84rem}
+  .result-line{font-size:.8rem;color:var(--muted);margin:-.8rem 0 1.4rem}
+  @media (max-width:760px){.toolbar{position:static}.tools{width:100%}.search{flex:1;min-width:0}}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.4rem}
+  .card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .5s var(--ease),border-color .3s,box-shadow .5s var(--ease)}
+  .card:hover{transform:translateY(-6px);border-color:var(--line-2);box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+  .card-media{position:relative;aspect-ratio:3/2;overflow:hidden;background:var(--panel-2)}
+  .card-media img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+  .card:hover .card-media img{transform:scale(1.06)}
+  .badge{position:absolute;top:.8rem;left:.8rem;z-index:2;font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:.35rem .6rem;border-radius:999px;background:rgba(11,12,14,.72);backdrop-filter:blur(6px);border:1px solid var(--line-2)}
+  .badge.hot{background:var(--accent);border-color:var(--accent);color:#fff}
+  .card-body{padding:1.15rem 1.15rem 1.2rem;display:flex;flex-direction:column;gap:.9rem;flex:1}
+  .card-title{display:flex;justify-content:space-between;gap:.8rem;align-items:baseline}
+  .card h3{font-family:'Archivo',sans-serif;font-stretch:108%;font-weight:700;font-size:1.12rem;line-height:1.2}
+  .card .make{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.15rem}
+  .price{font-family:'JetBrains Mono',monospace;font-size:.86rem;white-space:nowrap}
+  .specs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);padding-top:.85rem}
+  .specs div{display:flex;flex-direction:column;gap:.1rem}
+  .specs div+div{padding-left:.8rem;border-left:1px solid var(--line)}
+  .specs b{font-family:'Archivo',sans-serif;font-stretch:105%;font-weight:700;font-size:1.05rem}
+  .specs span{font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+  .card-actions{display:flex;gap:.5rem;margin-top:auto}
+  .card-actions .btn{padding:.6rem 1rem;font-size:.8rem}
+  .details-btn::before{content:"";position:absolute;inset:0;z-index:1}
+  .cmp{position:relative;z-index:2;margin-left:auto;display:inline-flex;align-items:center;gap:.45rem;font-size:.78rem;color:var(--muted);padding:.55rem .8rem;border-radius:999px;border:1px solid var(--line-2);transition:all .25s}
+  .cmp:hover{color:var(--text);border-color:var(--text)}
+  .cmp[aria-pressed="true"]{color:var(--bg);background:var(--accent-2);border-color:var(--accent-2)}
+  .cmp i{width:12px;height:12px;border-radius:3px;border:1.5px solid currentColor;display:inline-block;position:relative}
+  .cmp[aria-pressed="true"] i::after{content:"";position:absolute;left:3px;top:0;width:3px;height:7px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+  .empty{grid-column:1/-1;text-align:center;padding:4rem 1rem;border:1px dashed var(--line-2);border-radius:var(--radius);color:var(--muted)}
+  .empty button{color:var(--accent);text-decoration:underline;margin-top:.4rem}
+
+  /* ---------- Feature split (Electric) ---------- */
+  .split-sec{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(2rem,5vw,4.5rem);align-items:center}
+  .split-media{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;background:var(--panel)}
+  .split-media img{width:100%;height:118%;object-fit:cover;will-change:transform}
+  .split-sec h2{font-size:clamp(2.1rem,4.4vw,3.6rem);margin:.7rem 0 1.2rem}
+  .split-sec p{color:var(--muted);margin-bottom:1rem;max-width:48ch}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.8rem 0}
+  .kpi{border:1px solid var(--line);border-radius:12px;padding:1rem;background:var(--bg-2)}
+  .kpi b{display:block;font-family:'Archivo',sans-serif;font-stretch:110%;font-weight:800;font-size:1.6rem;color:var(--ok)}
+  .kpi span{font-size:.72rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  @media (max-width:880px){.split-sec{grid-template-columns:1fr}}
+
+  /* ---------- Motorcycles rail ---------- */
+  .moto-hero{position:relative;height:clamp(260px,42vw,460px);border-radius:var(--radius);overflow:hidden;margin-bottom:1.8rem}
+  .moto-hero img{width:100%;height:120%;object-fit:cover;filter:brightness(.6);will-change:transform}
+  .moto-hero .txt{position:absolute;left:clamp(1.2rem,4vw,2.6rem);bottom:clamp(1.2rem,4vw,2.4rem);z-index:2}
+  .moto-hero h2{font-size:clamp(2.2rem,6vw,5rem)}
+  .rail-wrap{position:relative}
+  .rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(280px,26%);gap:1.2rem;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:1rem;scrollbar-width:thin;scrollbar-color:var(--line-2) transparent}
+  .rail .card{scroll-snap-align:start}
+  .rail-nav{display:flex;gap:.5rem}
+  .round{width:44px;height:44px;border-radius:50%;border:1px solid var(--line-2);display:inline-flex;align-items:center;justify-content:center;transition:all .25s}
+  .round:hover{border-color:var(--text);background:var(--text);color:var(--bg)}
+  .round svg{width:16px;height:16px}
+  @media (max-width:760px){.rail{grid-auto-columns:82%}}
+
+  /* ---------- Quote band ---------- */
+  .band{position:relative;overflow:hidden;padding:clamp(6rem,14vw,11rem) var(--pad);text-align:center;background:#000}
+  .band img{position:absolute;inset:-12% 0;width:100%;height:124%;object-fit:cover;filter:brightness(.5);will-change:transform}
+  .band blockquote{position:relative;z-index:2;max-width:22ch;margin:0 auto;font-size:clamp(1.9rem,5vw,4.2rem)}
+  .band cite{position:relative;z-index:2;display:block;margin-top:1.6rem;font-style:normal;color:var(--muted)}
+
+  /* ---------- Compare ---------- */
+  .cmp-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-2)}
+  .cmp-table{width:100%;border-collapse:collapse;min-width:640px}
+  .cmp-table th,.cmp-table td{padding:1rem 1.1rem;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+  .cmp-table thead th{vertical-align:bottom}
+  .cmp-table tbody th{font-family:'JetBrains Mono',monospace;font-weight:400;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);width:16%}
+  .cmp-table tr:last-child td,.cmp-table tr:last-child th{border-bottom:none}
+  .cmp-head img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:10px;margin-bottom:.7rem}
+  .cmp-head strong{display:block;font-family:'Archivo',sans-serif;font-stretch:108%;font-size:1.02rem}
+  .cmp-head small{color:var(--muted)}
+  .cmp-head .remove{font-size:.74rem;color:var(--dim);text-decoration:underline;margin-top:.3rem}
+  .val{font-family:'Archivo',sans-serif;font-stretch:105%;font-weight:700;font-size:1.05rem}
+  .val.best{color:var(--accent-2)}
+  .bar{height:4px;border-radius:4px;background:var(--line);margin-top:.5rem;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0;transition:width 1.2s var(--ease)}
+  .cmp-note{font-size:.8rem;color:var(--dim);margin-top:.9rem}
+
+  .cmp-dock{position:fixed;left:50%;bottom:1.2rem;z-index:90;transform:translate(-50%,160%);transition:transform .5s var(--ease);display:flex;align-items:center;gap:.9rem;padding:.6rem .6rem .6rem 1rem;border-radius:999px;background:rgba(28,32,38,.92);backdrop-filter:blur(12px);border:1px solid var(--line-2);box-shadow:0 20px 50px -20px #000}
+  .cmp-dock.show{transform:translate(-50%,0)}
+  .cmp-dock .thumbs{display:flex}
+  .cmp-dock .thumbs img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--panel-2);margin-left:-10px}
+  .cmp-dock .thumbs img:first-child{margin-left:0}
+  .cmp-dock span{font-size:.82rem;color:var(--muted);white-space:nowrap}
+  .cmp-dock .clear{font-size:.78rem;color:var(--dim);text-decoration:underline}
+
+  /* ---------- Leaderboard ---------- */
+  .lb{display:grid;gap:.4rem}
+  .lb-row{display:grid;grid-template-columns:44px minmax(150px,240px) 1fr 70px;align-items:center;gap:1rem;padding:.75rem .6rem;border-bottom:1px solid var(--line);transition:background .25s}
+  .lb-row:hover{background:var(--bg-2)}
+  .lb-rank{font-family:'Archivo',sans-serif;font-stretch:115%;font-weight:800;font-size:1.3rem;color:var(--dim)}
+  .lb-row:nth-child(-n+3) .lb-rank{color:var(--accent)}
+  .lb-name{font-weight:600;font-size:.92rem}
+  .lb-name small{display:block;color:var(--dim);font-weight:400;font-size:.74rem}
+  .lb-track{height:8px;border-radius:8px;background:var(--panel);overflow:hidden}
+  .lb-track i{display:block;height:100%;width:0;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width 1.4s var(--ease);transition-delay:calc(var(--n)*.06s)}
+  .lb-time{font-family:'JetBrains Mono',monospace;text-align:right;font-size:.9rem}
+  @media (max-width:640px){.lb-row{grid-template-columns:34px 1fr 64px}.lb-track{grid-column:2/4}}
+
+  /* ---------- Test drive ---------- */
+  .drive{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(2rem,5vw,4rem);align-items:start}
+  .drive h2{font-size:clamp(2.1rem,4.4vw,3.6rem);margin:.7rem 0 1rem}
+  .drive p{color:var(--muted);max-width:44ch}
+  .perks{list-style:none;margin-top:1.6rem;display:grid;gap:.8rem}
+  .perks li{display:flex;gap:.7rem;align-items:flex-start;color:var(--muted);font-size:.92rem}
+  .perks li::before{content:"";flex:none;width:8px;height:8px;margin-top:.45rem;border-radius:50%;background:var(--accent)}
+  form.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(1.2rem,3vw,2rem);display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .field{display:flex;flex-direction:column;gap:.4rem}
+  .field.full{grid-column:1/-1}
+  .field label{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .field input,.field select,.field textarea{background:var(--bg-2);border:1px solid var(--line-2);border-radius:10px;padding:.8rem .9rem;outline:none;transition:border-color .2s;width:100%}
+  .field textarea{resize:vertical;min-height:90px}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
+  .field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239AA0A9' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .9rem center}
+  .field .err{font-size:.75rem;color:#ff7a7a;min-height:1em}
+  .field.invalid input,.field.invalid select{border-color:#ff7a7a}
+  .form-foot{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+  .form-foot small{color:var(--dim)}
+  .form-ok{grid-column:1/-1;display:none;padding:1rem;border-radius:10px;background:rgba(61,220,151,.1);border:1px solid rgba(61,220,151,.35);color:var(--ok);font-size:.9rem}
+  .form-ok.show{display:block}
+  @media (max-width:880px){.drive{grid-template-columns:1fr}}
+  @media (max-width:520px){form.panel{grid-template-columns:1fr}}
+
+  /* ---------- Detail dialog ---------- */
+  dialog{margin:auto;border:none;padding:0;background:var(--panel);color:var(--text);border-radius:18px;width:min(1040px,94vw);max-height:92vh;overflow:hidden;box-shadow:0 40px 120px -20px #000}
+  dialog::backdrop{background:rgba(5,6,8,.72);backdrop-filter:blur(6px)}
+  dialog[open]{animation:pop .45s var(--ease)}
+  @keyframes pop{from{opacity:0;transform:translateY(24px) scale(.98)}}
+  .dlg{display:grid;grid-template-columns:1.15fr .85fr;max-height:92vh}
+  .dlg-media{position:relative;background:#000;min-height:280px}
+  .dlg-media img{width:100%;height:100%;object-fit:cover}
+  .dlg-body{padding:clamp(1.3rem,3vw,2.2rem);overflow-y:auto;display:flex;flex-direction:column;gap:1rem}
+  .dlg-body h2{font-family:'Archivo',sans-serif;font-stretch:112%;font-weight:800;font-size:clamp(1.6rem,3vw,2.3rem);line-height:1.05;text-transform:uppercase}
+  .dlg-body p{color:var(--muted);font-size:.94rem}
+  .dlg-specs{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .dlg-specs div{padding:.8rem .9rem;border-bottom:1px solid var(--line)}
+  .dlg-specs div:nth-child(odd){border-right:1px solid var(--line)}
+  .dlg-specs div:nth-last-child(-n+2){border-bottom:none}
+  .dlg-specs span{display:block;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+  .dlg-specs b{font-family:'Archivo',sans-serif;font-stretch:105%;font-size:1.05rem}
+  .dlg-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:auto}
+  .dlg-x{position:absolute;top:.9rem;right:.9rem;z-index:3;width:40px;height:40px;border-radius:50%;background:rgba(11,12,14,.7);backdrop-filter:blur(6px);border:1px solid var(--line-2);display:inline-flex;align-items:center;justify-content:center}
+  .dlg-x svg{width:16px;height:16px}
+  @media (max-width:760px){.dlg{grid-template-columns:1fr;overflow-y:auto}.dlg-media{aspect-ratio:3/2;min-height:0}.dlg-body{overflow:visible}}
+
+  /* ---------- Footer ---------- */
+  footer{border-top:1px solid var(--line);padding:3rem 0 2.4rem;color:var(--muted);font-size:.84rem}
+  .foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2rem}
+  .foot h4{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text);margin-bottom:.9rem;font-weight:600}
+  .foot ul{list-style:none;display:grid;gap:.5rem}
+  .foot a:hover{color:var(--accent)}
+  .legal{margin-top:2.4rem;padding-top:1.4rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.76rem;color:var(--dim)}
+  .big-word{font-family:'Archivo',sans-serif;font-stretch:125%;font-weight:900;text-transform:uppercase;font-size:clamp(3.5rem,15vw,15rem);line-height:.8;letter-spacing:-.03em;color:transparent;-webkit-text-stroke:1px rgba(242,241,236,.12);margin-top:2.4rem;user-select:none;white-space:nowrap;overflow:hidden}
+  @media (max-width:760px){.foot{grid-template-columns:1fr 1fr}}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    html.js .reveal,html.js .wi{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#showroom">Skip to the showroom</a>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a href="#top" class="logo" aria-label="Ignition home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M18 3 7 18h7.5L12 29l12-16h-7.5z" fill="#FF5A1F"/></svg>
+      IGNITION
+    </a>
+    <nav class="links" aria-label="Primary">
+      <a href="#showroom">Showroom</a>
+      <a href="#electric">Electric</a>
+      <a href="#motorcycles">Motorcycles</a>
+      <a href="#compare">Compare</a>
+      <a href="#test-drive">Test Drive</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#test-drive" class="btn btn-primary">Book a test drive</a>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu"><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="mobile" id="mobileMenu">
+  <a href="#showroom">Showroom</a>
+  <a href="#electric">Electric</a>
+  <a href="#motorcycles">Motorcycles</a>
+  <a href="#compare">Compare</a>
+  <a href="#test-drive">Test Drive</a>
+  <a href="#test-drive" class="btn btn-primary">Book a test drive</a>
+</div>
+
+<main>
+<!-- ============ HERO ============ -->
+<section class="hero" id="top" aria-roledescription="carousel" aria-label="Featured vehicles">
+  <div class="slide active" data-name="Porsche 911 GT3" data-meta="502 hp · 0–100 in 3.4 s · 4.0 L flat-six">
+    <img src="images/hero-911-snow.jpg" alt="White Porsche 911 GT3 parked on a snowy mountain road" width="1920" height="1080" fetchpriority="high">
+  </div>
+  <div class="slide" data-name="Porsche Panamera GTS" data-meta="473 hp · 0–100 in 3.9 s · Grand tourer">
+    <img src="images/hero-panamera.jpg" alt="Black Porsche Panamera driving on a highway at dusk" width="1920" height="1080" loading="lazy">
+  </div>
+  <div class="slide" data-name="Ducati SuperSport 950 S" data-meta="110 hp · 937 cc Testastretta twin · Sport touring">
+    <img src="images/hero-ducati.jpg" alt="Red Ducati SuperSport motorcycle in a dark garage" width="1920" height="1080" loading="lazy">
+  </div>
+
+  <div class="hero-in wrap">
+    <span class="eyebrow reveal">Cars &amp; Motorcycles · Curated Showroom</span>
+    <h1 class="display reveal split-me" style="--d:.05s">Built to be <span class="accent">driven.</span></h1>
+    <p class="hero-sub reveal" style="--d:.15s">Ignition is a curated showroom for supercars, everyday performance, electric and classic machines. Explore real specs, compare up to three vehicles side by side, and book a test drive in under a minute.</p>
+    <div class="hero-actions reveal" style="--d:.25s">
+      <a href="#showroom" class="btn btn-primary">Explore the showroom
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      <a href="#compare" class="btn btn-ghost">Compare specs</a>
+    </div>
+    <div class="hero-foot reveal" style="--d:.35s">
+      <div class="stats">
+        <div><b class="count" data-to="24">24</b><span>Vehicles in stock</span></div>
+        <div><b class="count" data-to="17">17</b><span>Marques</span></div>
+        <div><b class="count" data-to="1479" data-sep="1">1,479</b><span>Top horsepower</span></div>
+        <div><b class="count" data-to="2.4" data-dec="1">2.4</b><span>Fastest 0–100 (s)</span></div>
+      </div>
+      <div class="slide-ctrl">
+        <p class="slide-caption" id="slideCaption" aria-live="polite"><strong>Porsche 911 GT3</strong>502 hp · 0–100 in 3.4 s · 4.0 L flat-six</p>
+        <div class="dots" role="group" aria-label="Choose slide">
+          <button class="dot active" aria-label="Slide 1" aria-current="true"><i></i></button>
+          <button class="dot" aria-label="Slide 2"><i></i></button>
+          <button class="dot" aria-label="Slide 3"><i></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span>Bugatti<i class="x">◆</i><b class="o">Ferrari</b><i class="x">◆</i>McLaren<i class="x">◆</i><b class="o">Lamborghini</b><i class="x">◆</i>Porsche<i class="x">◆</i><b class="o">Mercedes-AMG</b><i class="x">◆</i>BMW M<i class="x">◆</i><b class="o">Audi Sport</b><i class="x">◆</i>Tesla<i class="x">◆</i><b class="o">Ducati</b><i class="x">◆</i>KTM<i class="x">◆</i><b class="o">Yamaha</b><i class="x">◆</i></span>
+    <span>Bugatti<i class="x">◆</i><b class="o">Ferrari</b><i class="x">◆</i>McLaren<i class="x">◆</i><b class="o">Lamborghini</b><i class="x">◆</i>Porsche<i class="x">◆</i><b class="o">Mercedes-AMG</b><i class="x">◆</i>BMW M<i class="x">◆</i><b class="o">Audi Sport</b><i class="x">◆</i>Tesla<i class="x">◆</i><b class="o">Ducati</b><i class="x">◆</i>KTM<i class="x">◆</i><b class="o">Yamaha</b><i class="x">◆</i></span>
+  </div>
+</div>
+
+<!-- ============ SHOWROOM ============ -->
+<section class="block" id="showroom" aria-labelledby="showroomTitle">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <span class="eyebrow reveal">The Showroom</span>
+        <h2 class="display reveal split-me" id="showroomTitle">Find your next machine</h2>
+      </div>
+      <p class="reveal">Filter by type, search by make or model, sort by price or performance. Open any vehicle for its full spec sheet, or tick <strong>Compare</strong> on up to three.</p>
+    </div>
+
+    <div class="toolbar reveal" role="search">
+      <div class="chips" id="chips" aria-label="Filter by category"></div>
+      <div class="tools">
+        <label class="search">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3.5 3.5"/></svg>
+          <span class="sr-only">Search vehicles</span>
+          <input type="search" id="q" placeholder="Search make, model, engine…" autocomplete="off">
+        </label>
+        <label><span class="sr-only">Sort by</span>
+          <select class="select" id="sort">
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="hp-desc">Most powerful</option>
+            <option value="zero-asc">Quickest 0–100</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <p class="result-line" id="resultLine" aria-live="polite"></p>
+    <div class="grid" id="grid"></div>
+    <noscript><p class="empty">The interactive showroom needs JavaScript. Please enable it to browse all 24 vehicles.</p></noscript>
+  </div>
+</section>
+
+<!-- ============ ELECTRIC ============ -->
+<section class="block" id="electric" style="background:var(--bg-2)" aria-labelledby="evTitle">
+  <div class="wrap split-sec">
+    <div class="split-media reveal"><img src="images/electric-charging.jpg" alt="Charging cable plugged into an electric car's illuminated charge port" width="1600" height="900" loading="lazy" data-parallax="40"></div>
+    <div>
+      <span class="eyebrow reveal">Electric &amp; Hybrid</span>
+      <h2 class="display reveal split-me" id="evTitle">Instant torque. Zero excuses.</h2>
+      <p class="reveal">Electric doesn't mean boring. Our EV and hybrid line-up starts with practical, efficient daily drivers and goes all the way to hypercar-quick performance.</p>
+      <div class="kpis reveal">
+        <div class="kpi"><b>629 km</b><span>Max WLTP range</span></div>
+        <div class="kpi"><b>4.4 s</b><span>0–100 km/h, Model 3 LR</span></div>
+        <div class="kpi"><b>3</b><span>EV &amp; hybrid models</span></div>
+      </div>
+      <button class="btn btn-ghost reveal" data-filter="Electric">Show electric &amp; hybrid
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MOTORCYCLES ============ -->
+<section class="block" id="motorcycles" aria-labelledby="motoTitle">
+  <div class="wrap">
+    <div class="moto-hero reveal">
+      <img src="images/moto-rider.jpg" alt="Rider on a cruiser motorcycle on an open road at sunset" width="1600" height="900" loading="lazy" data-parallax="50">
+      <div class="txt">
+        <span class="eyebrow">Two Wheels</span>
+        <h2 class="display split-me" id="motoTitle">Ride further.</h2>
+      </div>
+    </div>
+    <div class="head" style="margin-bottom:1.4rem">
+      <p class="reveal">Superbikes, nakeds and cruisers, each one hand-picked and inspected. Swipe, scroll or use the arrows.</p>
+      <div class="rail-nav reveal">
+        <button class="round" id="railPrev" aria-label="Previous motorcycles"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M13 8H3M7 4 3 8l4 4"/></svg></button>
+        <button class="round" id="railNext" aria-label="Next motorcycles"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+      </div>
+    </div>
+    <div class="rail" id="rail" tabindex="0" aria-label="Motorcycles"></div>
+  </div>
+</section>
+
+<!-- ============ QUOTE BAND ============ -->
+<section class="band" aria-label="Our philosophy">
+  <img src="images/band-silhouette.jpg" alt="" width="1600" height="900" loading="lazy" data-parallax="90">
+  <blockquote class="display reveal split-me">“Specs tell you what it can do. A test drive tells you who you'll become.”</blockquote>
+  <cite class="mono reveal">— Ignition Showroom Notes</cite>
+</section>
+
+<!-- ============ COMPARE ============ -->
+<section class="block" id="compare" aria-labelledby="cmpTitle">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <span class="eyebrow reveal">Side by Side</span>
+        <h2 class="display reveal split-me" id="cmpTitle">Compare specs</h2>
+      </div>
+      <p class="reveal" id="cmpHint">Tick <strong>Compare</strong> on up to three vehicles in the showroom. Until then, here's a hypercar vs. supercar vs. track-weapon match-up.</p>
+    </div>
+    <div class="cmp-table-wrap reveal"><table class="cmp-table" id="cmpTable"></table></div>
+    <p class="cmp-note">Highlighted values are best-in-comparison. Figures are approximate manufacturer data for illustration.</p>
+  </div>
+</section>
+
+<!-- ============ LEADERBOARD ============ -->
+<section class="block" style="background:var(--bg-2)" aria-labelledby="lbTitle">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <span class="eyebrow reveal">Leaderboard</span>
+        <h2 class="display reveal split-me" id="lbTitle">Quickest to 100</h2>
+      </div>
+      <p class="reveal">0–100 km/h times across the whole showroom. Shorter bar means quicker. Click a row to open the car.</p>
+    </div>
+    <div class="lb reveal" id="lb"></div>
+  </div>
+</section>
+
+<!-- ============ TEST DRIVE ============ -->
+<section class="block" id="test-drive" aria-labelledby="tdTitle">
+  <div class="wrap drive">
+    <div>
+      <span class="eyebrow reveal">Test Drive</span>
+      <h2 class="display reveal split-me" id="tdTitle">Get behind the wheel</h2>
+      <p class="reveal">Choose a vehicle and a date. A product specialist will confirm your slot within one business day.</p>
+      <ul class="perks reveal">
+        <li>45-minute drive on a mixed city and highway route</li>
+        <li>Fully insured, with a specialist riding along</li>
+        <li>No-pressure, no deposit, no obligation</li>
+      </ul>
+    </div>
+    <form class="panel reveal" id="tdForm" novalidate>
+      <div class="field"><label for="tdName">Full name</label><input id="tdName" name="name" autocomplete="name" required><span class="err" aria-live="polite"></span></div>
+      <div class="field"><label for="tdEmail">Email</label><input id="tdEmail" name="email" type="email" autocomplete="email" required><span class="err" aria-live="polite"></span></div>
+      <div class="field"><label for="tdPhone">Phone</label><input id="tdPhone" name="phone" type="tel" autocomplete="tel" required pattern="[0-9+()\-\s]{7,}"><span class="err" aria-live="polite"></span></div>
+      <div class="field"><label for="tdDate">Preferred date</label><input id="tdDate" name="date" type="date" required><span class="err" aria-live="polite"></span></div>
+      <div class="field full"><label for="tdVehicle">Vehicle</label><select id="tdVehicle" name="vehicle" required><option value="">Choose a vehicle…</option></select><span class="err" aria-live="polite"></span></div>
+      <div class="field full"><label for="tdNotes">Anything we should know? (optional)</label><textarea id="tdNotes" name="notes" maxlength="500"></textarea></div>
+      <div class="form-ok" id="tdOk" role="status"></div>
+      <div class="form-foot">
+        <small>Demo form: nothing is sent or stored.</small>
+        <button class="btn btn-primary" type="submit">Request test drive</button>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a href="#top" class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M18 3 7 18h7.5L12 29l12-16h-7.5z" fill="#FF5A1F"/></svg>IGNITION</a>
+        <p style="margin-top:.9rem;max-width:32ch">A curated showroom for cars and motorcycles that make every drive worth taking.</p>
+      </div>
+      <div><h4>Showroom</h4><ul><li><a href="#showroom" data-filter="Supercar">Supercars</a></li><li><a href="#showroom" data-filter="Performance">Performance</a></li><li><a href="#showroom" data-filter="Electric">Electric</a></li><li><a href="#showroom" data-filter="Classic">Classic</a></li></ul></div>
+      <div><h4>Explore</h4><ul><li><a href="#motorcycles">Motorcycles</a></li><li><a href="#compare">Compare</a></li><li><a href="#test-drive">Test drive</a></li></ul></div>
+      <div><h4>Visit</h4><ul><li>Mon–Sat · 9:00–19:00</li><li>hello@ignition.example</li></ul></div>
+    </div>
+    <div class="big-word" aria-hidden="true">Ignition</div>
+    <div class="legal">
+      <span>© 2026 Ignition. A portfolio concept: fictional showroom, prices are placeholders.</span>
+      <span>Photography via <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>. Vehicle names and marks belong to their owners.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Compare dock -->
+<div class="cmp-dock" id="dock" role="region" aria-label="Comparison tray">
+  <div class="thumbs" id="dockThumbs"></div>
+  <span id="dockText">0 of 3 selected</span>
+  <button class="clear" id="dockClear">Clear</button>
+  <a href="#compare" class="btn btn-primary" style="padding:.6rem 1.1rem">Compare</a>
+</div>
+
+<!-- Detail dialog -->
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <div class="dlg">
+    <div class="dlg-media"><img id="dlgImg" alt=""></div>
+    <div class="dlg-body">
+      <span class="eyebrow" id="dlgCat"></span>
+      <h2 id="dlgTitle"></h2>
+      <p id="dlgDesc"></p>
+      <div class="dlg-specs" id="dlgSpecs"></div>
+      <div class="dlg-actions">
+        <button class="btn btn-primary" id="dlgBook">Book a test drive</button>
+        <button class="btn btn-ghost cmp-toggle" id="dlgCmp">Add to compare</button>
+      </div>
+    </div>
+  </div>
+  <button class="dlg-x" id="dlgClose" aria-label="Close"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m3 3 10 10M13 3 3 13"/></svg></button>
+</dialog>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ------------------------------------------------------------------
+     Vehicle data. Specs are approximate published figures; prices are
+     placeholders for this portfolio concept.
+  ------------------------------------------------------------------ */
+  var V = [
+    { id:"chiron", make:"Bugatti", name:"Chiron", cat:"Supercar", img:"bugatti-chiron", hp:1479, zero:2.4, top:420, engine:"8.0 L quad-turbo W16", drive:"AWD", year:2021, price:3000000, badge:"Hypercar",
+      desc:"Sixteen cylinders, four turbochargers and a limited 420 km/h top speed. The Chiron is less a car than a feat of engineering you can sit in." },
+    { id:"laferrari", make:"Ferrari", name:"LaFerrari", cat:"Supercar", img:"ferrari-laferrari", hp:950, zero:2.6, top:350, engine:"6.3 L V12 + HY-KERS hybrid", drive:"RWD", year:2015, price:3500000, badge:"Collector",
+      desc:"Maranello's first hybrid flagship pairs a naturally aspirated V12 with an electric motor for brutal, instant response." },
+    { id:"720s", make:"McLaren", name:"720S", cat:"Supercar", img:"mclaren-720s", hp:710, zero:2.9, top:341, engine:"4.0 L twin-turbo V8", drive:"RWD", year:2020, price:300000,
+      desc:"A carbon-fibre Monocage II tub, dihedral doors and aerodynamics that make it feel glued to the road." },
+    { id:"huracan", make:"Lamborghini", name:"Huracán EVO", cat:"Supercar", img:"lamborghini-huracan", hp:631, zero:2.9, top:325, engine:"5.2 L naturally aspirated V10", drive:"AWD", year:2021, price:265000, badge:"Hot",
+      desc:"One of the last great naturally aspirated V10s, with a soundtrack to match and predictive dynamics that make it friendly at the limit." },
+    { id:"aventador", make:"Lamborghini", name:"Aventador S", cat:"Supercar", img:"lamborghini-aventador", hp:740, zero:2.9, top:350, engine:"6.5 L V12", drive:"AWD", year:2019, price:420000,
+      desc:"Scissor doors, a screaming V12 and rear-wheel steering. The Aventador is pure theatre." },
+    { id:"gt3", make:"Porsche", name:"911 GT3", cat:"Performance", img:"porsche-911-gt3", hp:502, zero:3.4, top:318, engine:"4.0 L flat-six, 9,000 rpm", drive:"RWD", year:2023, price:185000, badge:"Hot",
+      desc:"A motorsport-derived flat-six that revs to 9,000 rpm in a 911 you can still drive to work. The benchmark driver's car." },
+    { id:"gtr", make:"Mercedes-AMG", name:"GT R", cat:"Performance", img:"amg-gt-r", hp:577, zero:3.6, top:318, engine:"4.0 L twin-turbo V8", drive:"RWD", year:2020, price:165000,
+      desc:"Nicknamed the \"Beast of the Green Hell\", developed at the Nürburgring with active aero and rear-axle steering." },
+    { id:"m5", make:"BMW", name:"M5 Competition", cat:"Performance", img:"bmw-m5", hp:617, zero:3.3, top:305, engine:"4.4 L twin-turbo V8", drive:"AWD (RWD mode)", year:2022, price:112000,
+      desc:"A five-seat executive sedan with supercar acceleration and a 2WD mode for when the road is yours." },
+    { id:"m4", make:"BMW", name:"M4 Competition", cat:"Performance", img:"bmw-m4", hp:503, zero:3.9, top:290, engine:"3.0 L twin-turbo inline-six", drive:"RWD", year:2023, price:82000,
+      desc:"Sharp, fast and genuinely usable every day: BMW M's straight-six coupé in its most focused trim." },
+    { id:"rs6", make:"Audi", name:"RS 6 Avant", cat:"Performance", img:"audi-rs6", hp:591, zero:3.6, top:305, engine:"4.0 L twin-turbo V8 mild-hybrid", drive:"quattro AWD", year:2022, price:125000,
+      desc:"The ultimate sleeper: room for the family and the dog, and quick enough to embarrass sports cars." },
+    { id:"panamera", make:"Porsche", name:"Panamera GTS", cat:"Performance", img:"porsche-panamera", hp:473, zero:3.9, top:300, engine:"4.0 L twin-turbo V8", drive:"AWD", year:2022, price:150000,
+      desc:"A four-door grand tourer with the soul of a sports car. Composed at 250 km/h, comfortable at 50." },
+    { id:"m440i", make:"BMW", name:"4 Series Coupé", cat:"Performance", img:"bmw-4-series", hp:382, zero:4.5, top:250, engine:"3.0 L turbo inline-six", drive:"RWD", year:2022, price:62000,
+      desc:"A sleek coupé with a silky straight-six and a balanced chassis. The sweet spot of the range." },
+    { id:"tt", make:"Audi", name:"TT Coupé", cat:"Performance", img:"audi-tt", hp:306, zero:4.5, top:250, engine:"2.0 L TFSI turbo", drive:"quattro AWD", year:2021, price:60000,
+      desc:"A design icon in its final, most refined form. Compact, quick and beautifully built." },
+    { id:"camaro", make:"Chevrolet", name:"Camaro ZL1", cat:"Muscle", img:"chevrolet-camaro", hp:650, zero:3.5, top:318, engine:"6.2 L supercharged V8", drive:"RWD", year:2022, price:72000,
+      desc:"Supercharged American muscle with magnetic ride control and the cornering ability to back up the noise." },
+    { id:"mustang", make:"Ford", name:"Mustang GT", cat:"Muscle", img:"ford-mustang", hp:480, zero:4.3, top:250, engine:"5.0 L Coyote V8", drive:"RWD", year:2023, price:45000,
+      desc:"The pony car that started it all, still powered by a naturally aspirated V8 and still impossible not to smile in." },
+    { id:"model3", make:"Tesla", name:"Model 3 Long Range", cat:"Electric", img:"tesla-model-3", hp:440, zero:4.4, top:201, engine:"Dual-motor electric · 629 km range", drive:"AWD", year:2024, price:47000,
+      desc:"The EV that went mainstream: long range, over-the-air updates and access to a huge fast-charging network." },
+    { id:"roadster", make:"Tesla", name:"Roadster", cat:"Electric", img:"tesla-roadster", hp:null, zero:2.1, top:400, engine:"Tri-motor electric (claimed)", drive:"AWD", year:2026, price:200000, badge:"Reservation",
+      desc:"The next-generation Roadster as shown on the stand. Figures are the manufacturer's claims; reservations open." },
+    { id:"rav4", make:"Toyota", name:"RAV4 Hybrid", cat:"Electric", img:"toyota-rav4", hp:219, zero:8.1, top:180, engine:"2.5 L hybrid", drive:"AWD-i", year:2023, price:34000,
+      desc:"The sensible pick: efficient hybrid power, all-wheel drive and a reputation for running forever." },
+    { id:"beetle", make:"Volkswagen", name:"Beetle 1500", cat:"Classic", img:"vw-beetle", hp:53, zero:22.5, top:125, engine:"1.5 L air-cooled flat-four", drive:"RWD", year:1967, price:18000, badge:"Classic",
+      desc:"Restored, matching numbers and finished in period orange. The friendliest classic on the road." },
+    { id:"supersport", make:"Ducati", name:"SuperSport 950 S", cat:"Motorcycle", img:"ducati-supersport", hp:110, zero:3.2, top:250, engine:"937 cc Testastretta L-twin", drive:"Chain", year:2023, price:17500,
+      desc:"Superbike looks with a comfortable riding position, Öhlins suspension and a quickshifter. The sport-tourer done the Ducati way." },
+    { id:"r7", make:"Yamaha", name:"YZF-R7", cat:"Motorcycle", img:"yamaha-r7", hp:72, zero:3.9, top:220, engine:"689 cc CP2 parallel twin", drive:"Chain", year:2023, price:9200,
+      desc:"An accessible supersport with a torquey twin. Light, flickable and perfect for track days." },
+    { id:"rc", make:"KTM", name:"RC 390", cat:"Motorcycle", img:"ktm-rc", hp:43, zero:5.5, top:170, engine:"373 cc single", drive:"Chain", year:2022, price:6000,
+      desc:"A race-bred, learner-friendly sportbike that teaches proper riding without punishing mistakes." },
+    { id:"duke", make:"KTM", name:"890 Duke", cat:"Motorcycle", img:"ktm-duke", hp:115, zero:3.2, top:240, engine:"889 cc LC8c parallel twin", drive:"Chain", year:2022, price:11500, badge:"Hot",
+      desc:"\"The Scalpel\": a razor-sharp naked bike with a punchy twin and electronics that never get in the way." },
+    { id:"cruiser", make:"Heritage", name:"V-Twin Cruiser", cat:"Motorcycle", img:"vtwin-cruiser", hp:90, zero:4.5, top:180, engine:"1.9 L air-cooled V-twin", drive:"Belt", year:2021, price:19000,
+      desc:"Low, loud and relaxed, built for long open roads and short coffee stops." }
+  ];
+  var byId = {}; V.forEach(function (v) { byId[v.id] = v; });
+  var CATS = ["All", "Supercar", "Performance", "Muscle", "Electric", "Classic", "Motorcycle"];
+  var LABEL = { Electric:"Electric & Hybrid" };
+
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+  var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var money = new Intl.NumberFormat("en-US", { style:"currency", currency:"USD", maximumFractionDigits:0 });
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]; }); };
+  var fmt = { hp:function (v) { return v.hp ? v.hp.toLocaleString("en-US") : "—"; }, zero:function (v) { return v.zero ? v.zero.toFixed(1) + " s" : "—"; }, top:function (v) { return v.top + " km/h"; } };
+
+  /* ---------------- Reveal + split headings ---------------- */
+  var wi = 0;
+  $$(".split-me").forEach(function (el) {
+    (function walk(n) {
+      Array.prototype.slice.call(n.childNodes).forEach(function (c) {
+        if (c.nodeType === 3) {
+          var fr = document.createDocumentFragment();
+          c.textContent.split(/(\s+)/).forEach(function (p) {
+            if (!p) return;
+            if (/^\s+$/.test(p)) { fr.appendChild(document.createTextNode(" ")); return; }
+            var w = document.createElement("span"), i = document.createElement("span");
+            w.className = "w"; i.className = "wi"; i.style.setProperty("--i", (wi++ % 12)); i.textContent = p;
+            w.appendChild(i); fr.appendChild(w);
+          });
+          c.parentNode.replaceChild(fr, c);
+        } else if (c.nodeType === 1) walk(c);
+      });
+    })(el);
+    el.classList.add("split");
+  });
+  var io = "IntersectionObserver" in window ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { threshold:.12, rootMargin:"0px 0px -5% 0px" }) : null;
+  function observe(root) {
+    $$(".reveal,.split", root).forEach(function (el) { io ? io.observe(el) : el.classList.add("in"); });
+  }
+
+  /* ---------------- Counters ---------------- */
+  function countUp(el) {
+    var to = parseFloat(el.dataset.to), dec = +(el.dataset.dec || 0), sep = el.dataset.sep, st = null;
+    var out = function (n) { return sep ? Math.round(n).toLocaleString("en-US") : n.toFixed(dec); };
+    if (reduced) { el.textContent = out(to); return; }
+    (function tick(t) { if (st === null) st = t; var p = Math.min((t - st) / 1500, 1);
+      el.textContent = out(to * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(tick); })(performance.now());
+  }
+  $$(".count").forEach(function (el) {
+    if (!io) return;
+    el.textContent = "0";
+    var cio = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { cio.disconnect(); countUp(el); } }, { threshold:.5 });
+    cio.observe(el);
+  });
+
+  /* ---------------- Card template ---------------- */
+  var compare = [];
+  function card(v, i) {
+    var a = document.createElement("article");
+    a.className = "card reveal";
+    a.style.setProperty("--d", ((i % 3) * 0.07) + "s");
+    a.innerHTML =
+      '<div class="card-media">' + (v.badge ? '<span class="badge' + (v.badge === "Hot" ? " hot" : "") + '">' + esc(v.badge) + "</span>" : "") +
+        '<img src="images/' + v.img + '.jpg" alt="' + esc(v.year + " " + v.make + " " + v.name) + '" width="900" height="600" loading="lazy" decoding="async"></div>' +
+      '<div class="card-body">' +
+        '<div class="card-title"><div><div class="make">' + esc(v.make) + " · " + v.year + "</div><h3>" + esc(v.name) + "</h3></div>" +
+        '<span class="price">' + money.format(v.price) + "</span></div>" +
+        '<div class="specs"><div><b>' + fmt.hp(v) + "</b><span>hp</span></div><div><b>" + fmt.zero(v) + "</b><span>0–100</span></div><div><b>" + v.top + "</b><span>km/h</span></div></div>" +
+        '<div class="card-actions"><button class="btn btn-ghost details-btn" data-open="' + v.id + '">Details<span class="sr-only"> for ' + esc(v.make + " " + v.name) + "</span></button>" +
+        '<button class="cmp" data-cmp="' + v.id + '" aria-pressed="' + (compare.indexOf(v.id) > -1) + '"><i></i>Compare<span class="sr-only"> ' + esc(v.name) + "</span></button></div>" +
+      "</div>";
+    return a;
+  }
+
+  /* ---------------- Showroom: filter / search / sort ---------------- */
+  var state = { cat:"All", q:"", sort:"featured" };
+  var grid = $("#grid"), chipsEl = $("#chips"), resultLine = $("#resultLine");
+  CATS.forEach(function (c) {
+    var n = c === "All" ? V.length : V.filter(function (v) { return v.cat === c; }).length;
+    var b = document.createElement("button");
+    b.className = "chip"; b.dataset.cat = c; b.setAttribute("aria-pressed", c === "All");
+    b.innerHTML = esc(LABEL[c] || c) + "<sup>" + n + "</sup>";
+    chipsEl.appendChild(b);
+  });
+  function setCat(c) {
+    state.cat = c;
+    $$(".chip", chipsEl).forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.cat === c); });
+    render();
+  }
+  function render() {
+    var q = state.q.trim().toLowerCase();
+    var list = V.filter(function (v) {
+      if (state.cat !== "All" && v.cat !== state.cat) return false;
+      if (!q) return true;
+      return (v.make + " " + v.name + " " + v.engine + " " + v.cat + " " + v.year).toLowerCase().indexOf(q) > -1;
+    });
+    var s = state.sort;
+    if (s === "price-asc") list.sort(function (a, b) { return a.price - b.price; });
+    if (s === "price-desc") list.sort(function (a, b) { return b.price - a.price; });
+    if (s === "hp-desc") list.sort(function (a, b) { return (b.hp || 0) - (a.hp || 0); });
+    if (s === "zero-asc") list.sort(function (a, b) { return a.zero - b.zero; });
+
+    grid.innerHTML = "";
+    if (!list.length) {
+      grid.innerHTML = '<div class="empty"><p>No vehicles match “' + esc(state.q) + '”' + (state.cat !== "All" ? " in " + esc(LABEL[state.cat] || state.cat) : "") + '.</p><button type="button" id="resetFilters">Reset filters</button></div>';
+      $("#resetFilters").addEventListener("click", function () { state.q = ""; $("#q").value = ""; setCat("All"); });
+    }
+    list.forEach(function (v, i) { grid.appendChild(card(v, i)); });
+    resultLine.textContent = "Showing " + list.length + " of " + V.length + " vehicles" +
+      (state.cat !== "All" ? " · " + (LABEL[state.cat] || state.cat) : "") + (q ? " · matching “" + state.q.trim() + "”" : "");
+    observe(grid);
+  }
+  chipsEl.addEventListener("click", function (e) { var b = e.target.closest(".chip"); if (b) setCat(b.dataset.cat); });
+  var qTimer;
+  $("#q").addEventListener("input", function (e) { clearTimeout(qTimer); qTimer = setTimeout(function () { state.q = e.target.value; render(); }, 120); });
+  $("#sort").addEventListener("change", function (e) { state.sort = e.target.value; render(); });
+  $$("[data-filter]").forEach(function (el) {
+    el.addEventListener("click", function (e) {
+      e.preventDefault(); setCat(el.dataset.filter);
+      $("#showroom").scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+    });
+  });
+
+  /* ---------------- Motorcycle rail ---------------- */
+  var rail = $("#rail");
+  V.filter(function (v) { return v.cat === "Motorcycle"; }).forEach(function (v, i) { rail.appendChild(card(v, i)); });
+  function railStep(dir) { rail.scrollBy({ left: dir * (rail.clientWidth * 0.8), behavior: reduced ? "auto" : "smooth" }); }
+  $("#railPrev").addEventListener("click", function () { railStep(-1); });
+  $("#railNext").addEventListener("click", function () { railStep(1); });
+
+  /* ---------------- Detail dialog ---------------- */
+  var dlg = $("#dlg"), current = null, lastFocus = null;
+  function openDetail(id) {
+    var v = byId[id]; if (!v) return;
+    current = v; lastFocus = document.activeElement;
+    $("#dlgImg").src = "images/" + v.img + ".jpg";
+    $("#dlgImg").alt = v.year + " " + v.make + " " + v.name;
+    $("#dlgCat").textContent = (LABEL[v.cat] || v.cat) + " · " + v.year;
+    $("#dlgTitle").textContent = v.make + " " + v.name;
+    $("#dlgDesc").textContent = v.desc;
+    var rows = [["Power", fmt.hp(v) + (v.hp ? " hp" : "")], ["0–100 km/h", fmt.zero(v)], ["Top speed", fmt.top(v)], ["Drivetrain", v.drive], ["Engine", v.engine], ["Price", money.format(v.price)]];
+    $("#dlgSpecs").innerHTML = rows.map(function (r) { return "<div><span>" + r[0] + "</span><b>" + esc(r[1]) + "</b></div>"; }).join("");
+    syncDlgCmp();
+    if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
+  }
+  function closeDetail() { if (dlg.open) { dlg.close ? dlg.close() : dlg.removeAttribute("open"); } }
+  dlg.addEventListener("close", function () { if (lastFocus && lastFocus.focus) lastFocus.focus(); });
+  dlg.addEventListener("click", function (e) { if (e.target === dlg) closeDetail(); });
+  $("#dlgClose").addEventListener("click", closeDetail);
+  $("#dlgBook").addEventListener("click", function () {
+    var id = current.id; closeDetail();
+    $("#tdVehicle").value = id;
+    $("#test-drive").scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+    setTimeout(function () { $("#tdName").focus({ preventScroll:true }); }, reduced ? 0 : 600);
+  });
+  $("#dlgCmp").addEventListener("click", function () { toggleCompare(current.id); });
+  function syncDlgCmp() {
+    if (!current) return;
+    var on = compare.indexOf(current.id) > -1;
+    $("#dlgCmp").textContent = on ? "Remove from compare" : (compare.length >= 3 ? "Compare is full (3)" : "Add to compare");
+    $("#dlgCmp").disabled = !on && compare.length >= 3;
+  }
+
+  /* ---------------- Compare ---------------- */
+  var DEFAULT_CMP = ["chiron", "720s", "gt3"];
+  var dock = $("#dock");
+  function toggleCompare(id) {
+    var i = compare.indexOf(id);
+    if (i > -1) compare.splice(i, 1);
+    else { if (compare.length >= 3) compare.shift(); compare.push(id); }
+    syncCompare();
+  }
+  function syncCompare() {
+    $$("[data-cmp]").forEach(function (b) { b.setAttribute("aria-pressed", compare.indexOf(b.dataset.cmp) > -1); });
+    dock.classList.toggle("show", compare.length > 0);
+    $("#dockThumbs").innerHTML = compare.map(function (id) { return '<img src="images/' + byId[id].img + '.jpg" alt="">'; }).join("");
+    $("#dockText").textContent = compare.length + " of 3 selected";
+    $("#cmpHint").innerHTML = compare.length
+      ? "Comparing your selection. Add or remove vehicles from the showroom (up to three)."
+      : "Tick <strong>Compare</strong> on up to three vehicles in the showroom. Until then, here's a hypercar vs. supercar vs. track-weapon match-up.";
+    renderCompare();
+    syncDlgCmp();
+  }
+  function renderCompare() {
+    var ids = compare.length ? compare : DEFAULT_CMP;
+    var list = ids.map(function (id) { return byId[id]; });
+    var metrics = [
+      { k:"hp", label:"Power", show:function (v) { return fmt.hp(v) + (v.hp ? " hp" : ""); }, better:"high" },
+      { k:"zero", label:"0–100 km/h", show:fmt.zero, better:"low" },
+      { k:"top", label:"Top speed", show:fmt.top, better:"high" },
+      { k:"price", label:"Price", show:function (v) { return money.format(v.price); }, better:"low" },
+      { k:"engine", label:"Engine", show:function (v) { return v.engine; } },
+      { k:"drive", label:"Drivetrain", show:function (v) { return v.drive; } }
+    ];
+    var html = '<thead><tr><th scope="col"><span class="sr-only">Spec</span></th>' + list.map(function (v) {
+      return '<th scope="col"><div class="cmp-head"><img src="images/' + v.img + '.jpg" alt="" loading="lazy"><strong>' + esc(v.make + " " + v.name) + "</strong><small>" + esc((LABEL[v.cat] || v.cat) + " · " + v.year) + "</small>" +
+        (compare.length ? '<br><button class="remove" data-cmp-remove="' + v.id + '">Remove</button>' : "") + "</div></th>";
+    }).join("") + "</tr></thead><tbody>";
+    metrics.forEach(function (m) {
+      var nums = list.map(function (v) { return typeof v[m.k] === "number" ? v[m.k] : null; }).filter(function (n) { return n !== null; });
+      var max = Math.max.apply(null, nums), min = Math.min.apply(null, nums);
+      html += '<tr><th scope="row">' + m.label + "</th>" + list.map(function (v) {
+        var n = typeof v[m.k] === "number" ? v[m.k] : null, bar = "", best = false;
+        if (m.better && n !== null && nums.length > 1) {
+          best = m.better === "high" ? n === max : n === min;
+          var pct = m.better === "high" ? n / max : min / n;
+          bar = '<div class="bar"><i data-w="' + Math.round(pct * 100) + '"></i></div>';
+        }
+        return '<td><span class="val' + (best ? " best" : "") + '">' + esc(m.show(v)) + "</span>" + bar + "</td>";
+      }).join("") + "</tr>";
+    });
+    $("#cmpTable").innerHTML = html + "</tbody>";
+    growBars($("#cmpTable"));
+  }
+  function growBars(root) {
+    var bars = $$(".bar i", root);
+    var go = function () { bars.forEach(function (b) { b.style.width = b.dataset.w + "%"; }); };
+    if (!io || reduced) return go();
+    var bo = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { bo.disconnect(); requestAnimationFrame(go); } }, { threshold:.2 });
+    bo.observe(root);
+  }
+  document.addEventListener("click", function (e) {
+    var t;
+    if ((t = e.target.closest("[data-cmp]"))) { toggleCompare(t.dataset.cmp); return; }
+    if ((t = e.target.closest("[data-cmp-remove]"))) { toggleCompare(t.dataset.cmpRemove); return; }
+    if ((t = e.target.closest("[data-open]"))) { openDetail(t.dataset.open); return; }
+  });
+  $("#dockClear").addEventListener("click", function () { compare = []; syncCompare(); });
+
+  /* ---------------- Leaderboard ---------------- */
+  // Production vehicles only: claimed figures for unreleased models don't count.
+  var lbList = V.filter(function (v) { return v.zero && v.cat !== "Classic" && v.badge !== "Reservation"; }).sort(function (a, b) { return a.zero - b.zero; }).slice(0, 10);
+  var fastest = lbList[0].zero, lb = $("#lb");
+  lb.innerHTML = lbList.map(function (v, i) {
+    return '<button class="lb-row" data-open="' + v.id + '" style="--n:' + i + ';text-align:left;width:100%">' +
+      '<span class="lb-rank">' + String(i + 1).padStart(2, "0") + "</span>" +
+      '<span class="lb-name">' + esc(v.make + " " + v.name) + "<small>" + esc(v.engine) + "</small></span>" +
+      '<span class="lb-track" aria-hidden="true"><i data-w="' + Math.round((v.zero / lbList[lbList.length - 1].zero) * 100) + '"></i></span>' +
+      '<span class="lb-time">' + v.zero.toFixed(1) + " s</span></button>";
+  }).join("");
+  (function () {
+    var bars = $$(".lb-track i", lb), go = function () { bars.forEach(function (b) { b.style.width = b.dataset.w + "%"; }); };
+    if (!io || reduced) return go();
+    var lo = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { lo.disconnect(); go(); } }, { threshold:.25 });
+    lo.observe(lb);
+  })();
+
+  /* ---------------- Hero slideshow ---------------- */
+  var hero = $(".hero"), slides = $$(".slide", hero), dots = $$(".dot", hero), cap = $("#slideCaption");
+  var cur = 0, timer = null, SLIDE_MS = 6500;
+  hero.style.setProperty("--slide-ms", SLIDE_MS + "ms");
+  function show(n) {
+    cur = (n + slides.length) % slides.length;
+    slides.forEach(function (s, i) { s.classList.toggle("active", i === cur); });
+    dots.forEach(function (d, i) {
+      d.classList.toggle("active", i === cur); d.classList.toggle("done", i < cur);
+      if (i === cur) d.setAttribute("aria-current", "true"); else d.removeAttribute("aria-current");
+      var bar = d.firstElementChild; bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = "";
+    });
+    var s = slides[cur];
+    $$("img", s).forEach(function (img) { img.loading = "eager"; });
+    cap.innerHTML = "<strong>" + esc(s.dataset.name) + "</strong>" + esc(s.dataset.meta);
+    schedule();
+  }
+  function schedule() { clearTimeout(timer); if (!reduced && !hero.classList.contains("paused")) timer = setTimeout(function () { show(cur + 1); }, SLIDE_MS); }
+  dots.forEach(function (d, i) { d.addEventListener("click", function () { show(i); }); });
+  function pause(on) { hero.classList.toggle("paused", on); if (on) clearTimeout(timer); else schedule(); }
+  hero.addEventListener("mouseenter", function () { pause(true); });
+  hero.addEventListener("mouseleave", function () { pause(false); });
+  hero.addEventListener("focusin", function () { pause(true); });
+  hero.addEventListener("focusout", function () { pause(false); });
+  document.addEventListener("visibilitychange", function () { pause(document.hidden); });
+  if (reduced) hero.classList.add("paused");
+  schedule();
+
+  /* ---------------- Nav: scroll state, scroll-spy, mobile menu ---------------- */
+  var nav = $("#nav"), spy = $$(".links a"), secs = $$("main section[id]");
+  var menuBtn = $("#menuBtn"), menu = $("#mobileMenu");
+  function setMenu(open) {
+    menu.classList.toggle("open", open);
+    menuBtn.setAttribute("aria-expanded", open);
+    menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  }
+  menuBtn.addEventListener("click", function () { setMenu(menuBtn.getAttribute("aria-expanded") !== "true"); });
+  $$("a", menu).forEach(function (a) { a.addEventListener("click", function () { setMenu(false); }); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
+
+  var parallax = $$("[data-parallax]");
+  var ticking = false;
+  function onScroll() {
+    ticking = false;
+    var y = scrollY, vh = innerHeight, mid = y + vh * 0.4, active = null;
+    nav.classList.toggle("scrolled", y > 40);
+    secs.forEach(function (s) { if (s.offsetTop <= mid && s.offsetTop + s.offsetHeight > mid) active = s.id; });
+    spy.forEach(function (a) { a.classList.toggle("active", a.getAttribute("href") === "#" + active); });
+    if (reduced) return;
+    parallax.forEach(function (img) {
+      var r = img.parentElement.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > vh + 200) return;
+      var p = (r.top + r.height / 2 - vh / 2) / vh;
+      img.style.transform = "translate3d(0," + (-p * (+img.dataset.parallax)).toFixed(1) + "px,0)";
+    });
+  }
+  function requestTick() { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }
+  addEventListener("scroll", requestTick, { passive:true });
+  addEventListener("resize", requestTick);
+  onScroll();
+
+  /* ---------------- Test drive form ---------------- */
+  var form = $("#tdForm"), sel = $("#tdVehicle"), date = $("#tdDate");
+  var groups = {};
+  V.forEach(function (v) { (groups[v.cat] = groups[v.cat] || []).push(v); });
+  Object.keys(groups).forEach(function (c) {
+    var og = document.createElement("optgroup"); og.label = LABEL[c] || c;
+    groups[c].forEach(function (v) { var o = document.createElement("option"); o.value = v.id; o.textContent = v.make + " " + v.name; og.appendChild(o); });
+    sel.appendChild(og);
+  });
+  var t = new Date(); t.setDate(t.getDate() + 1); // local date, not UTC
+  date.min = t.getFullYear() + "-" + String(t.getMonth() + 1).padStart(2, "0") + "-" + String(t.getDate()).padStart(2, "0");
+  var MSG = { valueMissing:"This field is required.", typeMismatch:"Please enter a valid email.", patternMismatch:"Please enter a valid phone number.", rangeUnderflow:"Please choose a date from tomorrow onwards." };
+  function check(el) {
+    var f = el.closest(".field"), msg = "";
+    if (!el.validity.valid) for (var k in MSG) if (el.validity[k]) { msg = MSG[k]; break; }
+    f.classList.toggle("invalid", !!msg);
+    el.setAttribute("aria-invalid", !!msg);
+    $(".err", f).textContent = msg;
+    return !msg;
+  }
+  $$("input[required],select[required]", form).forEach(function (el) {
+    el.addEventListener("blur", function () { check(el); });
+    el.addEventListener("input", function () { if (el.closest(".field").classList.contains("invalid")) check(el); });
+  });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var fields = $$("input[required],select[required]", form), ok = true, first = null;
+    fields.forEach(function (el) { if (!check(el)) { ok = false; first = first || el; } });
+    if (!ok) { first.focus(); return; }
+    var v = byId[sel.value], d = new Date(date.value + "T00:00:00");
+    $("#tdOk").textContent = "Thanks, " + $("#tdName").value.trim().split(" ")[0] + "! Your " + v.make + " " + v.name + " test drive request for " +
+      d.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric" }) + " is in. We'll email " + $("#tdEmail").value.trim() + " to confirm.";
+    $("#tdOk").classList.add("show");
+    form.reset();
+  });
+
+  /* ---------------- Boot ---------------- */
+  render();
+  renderCompare();
+  observe(document);
+  /* failsafe: never leave content hidden */
+  setTimeout(function () { $$(".reveal:not(.in),.split:not(.in)").forEach(function (el) { el.classList.add("in"); }); }, 2500);
+})();
+</script>
+</body>
+</html>

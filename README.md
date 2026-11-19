@@ -1,6 +1,6 @@
 # Vincent Aaron B. Vicente — Portfolio
 
-Personal portfolio site of **Vincent Aaron B. Vicente**, a BSIT graduate (Cum Laude) and web and software developer from Bulacan, Philippines.
+Personal portfolio site of **Vincent Aaron B. Vicente**, a full-stack and AI automation developer and BSIT graduate (Cum Laude) from Bulacan, Philippines.
 
 **Live site:** https://vincent-aaron.github.io/project-portfolio/
 
@@ -14,12 +14,12 @@ Hero (résumé download, GitHub) · tech ticker · 4 featured projects · filter
 
 | Project | Stack | Live demo | Source |
 | --- | --- | --- | --- |
-| Barangay Adjudication MIS | PHP, MySQL, JavaScript | [Live demo](https://bp4mis.liveblog365.com/bpamis_website/bpamis.php) | [barangay-adjudication-mis](https://github.com/vincent-aaron/barangay-adjudication-mis) |
-| Electro Galaxy | Next.js, TypeScript, Supabase | [electro-galaxy.vercel.app](https://electro-galaxy.vercel.app) | [electro-galaxy](https://github.com/vincent-aaron/electro-galaxy) |
-| Auto Apply | Web | – | [auto-apply](https://github.com/vincent-aaron/auto-apply) |
+| Vera Frei | Python, LLM agents, Playwright, SQLite | – | [vera-frei](https://github.com/vincent-aaron/vera-frei) |
+| Electro Galaxy | Next.js, TypeScript, Supabase | – | [electro-galaxy](https://github.com/vincent-aaron/electro-galaxy) |
 | Tech IMS | Python, Django, PostgreSQL | [tech-ims-azure.vercel.app](https://tech-ims-azure.vercel.app) | [tech-ims](https://github.com/vincent-aaron/tech-ims) |
+| Barangay Adjudication MIS | PHP, MySQL, JavaScript | – | [barangay-adjudication-mis](https://github.com/vincent-aaron/barangay-adjudication-mis) |
 
-More projects (RuneBound, LogPose, Elevating IQ, Titan Cruise, CineMax, Simple Calc and others) are in the archive section of the site.
+More projects (Auto Apply, RuneBound, LogPose, Elevating IQ, Titan Cruise, CineMax, Simple Calc and others) are in the archive section of the site.
 
 ## Editing projects
 
@@ -31,9 +31,10 @@ All project content lives in the `PROJECTS` array near the top of the `<script>`
 index.html
 assets/
   Vicente_Vincent_Aaron_Resume.pdf
-  profile.png
-  bpamis.png, electro-galaxy.png, tech-ims.png, runebound.jpg,
-  elevating-iq.jpg, titan-cruise.png, simple-calc.png
+  profile.jpg
+  one screenshot or cover image per project
+ignition/     # Ignition showroom concept, live at /ignition/
+otherworld/   # Otherworld Books concept, live at /otherworld/
 ```
 
 ## Run / deploy

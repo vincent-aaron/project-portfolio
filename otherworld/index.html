@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>document.documentElement.classList.add('js');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otherworld — Light Novels, Curated</title>
+<meta name="description" content="Otherworld is a curated storefront for isekai, fantasy, and slice-of-life light novels in English.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='%23D6552F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2F1EA;
+    --paper-2:#EAE7DC;
+    --ink:#1B2430;
+    --ink-soft:#4A5262;
+    --forest:#2F5D50;
+    --coral:#D6552F;
+    --coral-dim:#B8451F;
+    --line: rgba(27,36,48,0.12);
+    --ease: cubic-bezier(.19,1,.22,1);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  /* keep anchored section headings clear of the sticky navbar */
+  section[id]{ scroll-margin-top:76px; }
+  @media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto !important; animation:none !important; transition:none !important;} }
+  body{ background:var(--paper); color:var(--ink); font-family:'Inter',sans-serif; overflow-x:hidden; }
+  h1,h2,h3{ font-family:'Fraunces', serif; font-weight:500; }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+  img{ display:block; width:100%; height:100%; object-fit:cover; }
+  .eyebrow{ font-family:'IBM Plex Mono', monospace; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--coral); }
+  ::selection{ background:var(--forest); color:var(--paper); }
+  :focus-visible{ outline:2px solid var(--coral); outline-offset:3px; }
+
+  /* fade+rise reveal, staggered via --d — hidden state applies ONLY when JS is confirmed running */
+  html.js .reveal{ opacity:0; transform:translateY(30px); transition:opacity 0.8s var(--ease), transform 0.8s var(--ease); transition-delay:var(--d,0s); }
+  html.js .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* image wipe-reveal — hidden state ONLY under html.js; page renders fully with JS off or errored */
+  .wipe{ position:relative; overflow:hidden; background:#2A3341; }
+  html.js .wipe{ clip-path:inset(0 0 100% 0); transition:clip-path 1s var(--ease); transition-delay:var(--d,0s); }
+  html.js .wipe.in{ clip-path:inset(0 0 0% 0); }
+  html.js .wipe img{ transform:scale(1.15); transition:transform 1.2s var(--ease); transition-delay:var(--d,0s); }
+  html.js .wipe.in img{ transform:scale(1); }
+
+  /* ---------- Nav ---------- */
+  nav{
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1.2rem clamp(1.5rem,5vw,3.5rem);
+    background:rgba(242,241,234,0.9); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{ font-family:'Fraunces', serif; font-size:1.4rem; font-weight:600; display:flex; align-items:center; gap:0.5rem; }
+  .logo .dot{ width:8px; height:8px; border-radius:50%; background:var(--coral); display:inline-block; animation:pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:0.5; transform:scale(1.3);} }
+  .nav-links{ display:flex; gap:2rem; font-size:0.85rem; font-weight:500; color:var(--ink-soft); }
+  .nav-links a{ position:relative; padding-bottom:2px; transition:color 0.2s ease; }
+  .nav-links a::after{ content:''; position:absolute; left:0; bottom:-2px; width:0; height:1.5px; background:var(--coral); transition:width 0.3s var(--ease); }
+  .nav-links a:hover, .nav-links a:focus-visible{ color:var(--ink); }
+  .nav-links a:hover::after, .nav-links a:focus-visible::after{ width:100%; }
+  .nav-links a.active{ color:var(--ink); }
+  .nav-links a.active::after{ width:100%; }
+  @media (max-width:820px){ .nav-links{ display:none; } }
+  .nav-cta{ background:var(--ink); color:var(--paper); font-size:0.8rem; font-weight:500; padding:0.65rem 1.2rem; border-radius:2px; transition:background 0.25s ease, transform 0.25s var(--ease); }
+  .nav-cta:hover, .nav-cta:focus-visible{ background:var(--coral-dim); transform:translateY(-2px); }
+
+  /* ---------- Hero (full-bleed photo, parallax) ---------- */
+  .hero{ position:relative; min-height:92vh; display:flex; align-items:center; overflow:hidden; }
+  .hero-bg{ position:absolute; inset:-10% 0 -10% 0; z-index:0; background:#2A3341; will-change:transform; }
+  .hero-bg img{ filter:saturate(0.85) brightness(0.5); }
+  .hero-scrim{ position:absolute; inset:0; z-index:1; background:linear-gradient(180deg, rgba(20,26,35,0.6) 0%, rgba(20,26,35,0.4) 45%, var(--paper) 100%); }
+  .hero-inner{ position:relative; z-index:2; max-width:1360px; margin:0 auto; padding:0 clamp(1.5rem,5vw,3.5rem); width:100%; }
+  .hero-title{ font-size:clamp(2.6rem,6vw,4.6rem); line-height:1.05; color:#F7F5EE; max-width:16ch; }
+  .hero-title .word{ display:inline-block; }
+  .hero-title .accent{ font-style:italic; color:#E9A98A; }
+  .hero p.sub{ margin-top:1.2rem; color:rgba(247,245,238,0.85); font-size:1.08rem; max-width:44ch; line-height:1.65; }
+  .hero-search{ margin-top:2rem; display:flex; max-width:420px; border:1.5px solid rgba(247,245,238,0.6); border-radius:2px; overflow:hidden; background:rgba(27,36,48,0.25); backdrop-filter:blur(4px); transition:border-color 0.3s ease; }
+  .hero-search:focus-within{ border-color:var(--coral); }
+  .hero-search input{ flex:1; border:none; background:transparent; padding:0.9rem 1rem; font-family:'Inter',sans-serif; font-size:0.9rem; color:#F7F5EE; }
+  .hero-search input::placeholder{ color:rgba(247,245,238,0.6); }
+  .hero-search input:focus-visible{ outline:none; }
+  .hero-search button{ background:var(--coral); color:#fff; padding:0.9rem 1.3rem; font-size:0.85rem; font-weight:500; transition:background 0.2s ease; }
+  .hero-search button:hover{ background:var(--coral-dim); }
+  .hero-stats{ display:flex; gap:2.2rem; margin-top:2.4rem; font-family:'IBM Plex Mono', monospace; }
+  .hero-stats div{ display:flex; flex-direction:column; }
+  .hero-stats b{ font-size:1.3rem; color:#F7F5EE; }
+  .hero-stats span{ font-size:0.7rem; color:rgba(247,245,238,0.65); text-transform:uppercase; letter-spacing:0.06em; }
+  .scroll-cue{ position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); z-index:2; width:22px; height:36px; border:1.5px solid rgba(247,245,238,0.6); border-radius:12px; }
+  .scroll-cue::after{ content:''; position:absolute; top:6px; left:50%; width:3px; height:7px; background:#F7F5EE; border-radius:2px; transform:translateX(-50%); animation:scrollDot 1.8s ease-in-out infinite; }
+  @keyframes scrollDot{ 0%{ opacity:1; top:6px;} 70%{ opacity:0; top:20px;} 100%{ opacity:0; top:6px;} }
+
+  /* ---------- Section shell ---------- */
+  section.block{ padding:4.5rem clamp(1.5rem,5vw,3.5rem); max-width:1360px; margin:0 auto; }
+  .block-head{ display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:2.4rem; flex-wrap:wrap; gap:1rem; }
+  .block-head h2{ font-size:clamp(1.8rem,3vw,2.4rem); margin-top:0.4rem; }
+  .block-head p{ color:var(--ink-soft); font-size:0.9rem; max-width:38ch; }
+
+  /* ---------- Arrivals banner ---------- */
+  .arrivals-banner{ position:relative; height:220px; border-radius:6px; margin-bottom:2.4rem; overflow:hidden; }
+  .arrivals-banner img{ filter:saturate(0.9) brightness(0.75); }
+  .arrivals-banner::after{ content:''; position:absolute; inset:0; z-index:1; background:linear-gradient(90deg, rgba(27,36,48,0.75), rgba(27,36,48,0.1)); pointer-events:none; }
+  .arrivals-banner-text{ position:absolute; left:2rem; bottom:1.6rem; z-index:2; color:#F7F5EE; }
+  .arrivals-banner-text .eyebrow{ color:#E9A98A; }
+  .arrivals-banner-text h3{ font-size:1.7rem; margin-top:0.3rem; }
+
+  /* ---------- Catalog grid ---------- */
+  .catalog-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem; }
+  @media (max-width:900px){ .catalog-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:600px){ .catalog-grid{ grid-template-columns:1fr; } }
+
+  .book-card[hidden]{ display:none; }
+  .search-status{ font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--ink-soft); margin:-1.4rem 0 1.4rem; min-height:1.2em; }
+  .search-status button{ color:var(--coral); text-decoration:underline; font-size:inherit; margin-left:0.4rem; }
+  .book-cover{ aspect-ratio:2/3; border-radius:3px; display:flex; flex-direction:column; justify-content:flex-end; padding:1.1rem; transition:transform 0.4s var(--ease), box-shadow 0.4s var(--ease); box-shadow:0 10px 24px -14px rgba(27,36,48,0.3); }
+  .book-cover img{ position:absolute; inset:0; z-index:0; }
+  .book-cover::after{ content:''; position:absolute; inset:0; z-index:1; background:linear-gradient(180deg, rgba(27,36,48,0.05) 30%, rgba(15,20,27,0.88) 100%); pointer-events:none; }
+  .book-card:hover .book-cover, .book-card:focus-within .book-cover{ transform:translateY(-10px) rotate(-0.6deg); box-shadow:0 28px 44px -18px rgba(27,36,48,0.48); }
+  .book-card:hover .book-cover img{ transform:scale(1.1); }
+  .book-cover .tag{ position:relative; z-index:2; font-family:'IBM Plex Mono',monospace; font-size:0.58rem; letter-spacing:0.08em; text-transform:uppercase; color:rgba(242,241,234,0.75); }
+  .book-cover h3{ position:relative; z-index:2; color:#F2F1EA; font-size:1.2rem; margin-top:0.35rem; line-height:1.18; }
+  .book-meta{ display:flex; justify-content:space-between; align-items:baseline; margin-top:0.7rem; }
+  .book-meta .author{ font-size:0.82rem; color:var(--ink-soft); }
+  .book-meta .price{ font-family:'IBM Plex Mono',monospace; font-size:0.82rem; color:var(--ink); }
+
+  /* ---------- Genre cards ---------- */
+  .genre-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+  @media (max-width:760px){ .genre-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:480px){ .genre-grid{ grid-template-columns:1fr; } }
+  .genre-chip{ position:relative; border-radius:5px; height:190px; display:flex; flex-direction:column; justify-content:flex-end; padding:1.2rem; transition:transform 0.35s var(--ease), box-shadow 0.35s var(--ease); }
+  .genre-chip img{ position:absolute; inset:0; z-index:0; filter:saturate(0.85) brightness(0.65); transition:transform 0.6s var(--ease); }
+  .genre-chip::after{ content:''; position:absolute; inset:0; z-index:1; background:linear-gradient(180deg, rgba(27,36,48,0.05), rgba(15,20,27,0.85)); pointer-events:none; }
+  .genre-chip:hover{ transform:translateY(-6px); box-shadow:0 18px 32px -16px rgba(27,36,48,0.42); }
+  .genre-chip:hover img{ transform:scale(1.12); }
+  .genre-chip .count{ position:relative; z-index:2; font-family:'IBM Plex Mono',monospace; font-size:0.68rem; color:rgba(242,241,234,0.75); }
+  .genre-chip h3{ position:relative; z-index:2; font-size:1.25rem; color:#F2F1EA; margin-top:0.2rem; }
+
+  /* ---------- Quote band ---------- */
+  .quote-band{ position:relative; padding:6rem clamp(1.5rem,5vw,3.5rem); background:#2A3341; overflow:hidden; }
+  .quote-band img{ position:absolute; inset:0; z-index:0; filter:saturate(0.7) brightness(0.5); }
+  .quote-band::after{ content:''; position:absolute; inset:0; z-index:1; background:rgba(27,36,48,0.4); }
+  .quote-band blockquote{ position:relative; z-index:2; max-width:760px; margin:0 auto; text-align:center; font-family:'Fraunces',serif; font-style:italic; font-size:clamp(1.5rem,3vw,2.2rem); color:#F7F5EE; line-height:1.5; }
+  .quote-band cite{ position:relative; z-index:2; display:block; text-align:center; margin-top:1.4rem; font-family:'IBM Plex Mono',monospace; font-style:normal; font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:rgba(247,245,238,0.7); }
+
+  /* ---------- Rankings ---------- */
+  .rankings-wrap{ display:grid; grid-template-columns:1fr 320px; gap:2.5rem; align-items:start; }
+  @media (max-width:860px){ .rankings-wrap{ grid-template-columns:1fr; } }
+  .rank-list{ display:flex; flex-direction:column; border-top:1px solid var(--line); }
+  .rank-row{ display:grid; grid-template-columns:60px 1fr auto; align-items:center; gap:1.2rem; padding:1.2rem 0.4rem; border-bottom:1px solid var(--line); transition:background 0.25s ease, padding-left 0.25s var(--ease); }
+  .rank-row:hover{ background:var(--paper-2); padding-left:0.8rem; }
+  .rank-num{ font-family:'Fraunces',serif; font-style:italic; font-size:2rem; color:var(--line); transition:color 0.25s ease; }
+  .rank-row:hover .rank-num{ color:var(--coral); }
+  .rank-row.top .rank-num{ color:var(--coral); }
+  .rank-info h3{ font-size:1.1rem; }
+  .rank-info .author{ font-size:0.8rem; color:var(--ink-soft); margin-top:0.15rem; }
+  .rank-trend{ font-family:'IBM Plex Mono',monospace; font-size:0.75rem; color:var(--forest); white-space:nowrap; }
+  .rank-side{ border-radius:5px; height:100%; min-height:340px; position:relative; background:#2A3341; }
+  .rank-side img{ filter:saturate(0.85) brightness(0.8); }
+  .rank-side-text{ position:absolute; left:1.2rem; bottom:1.2rem; z-index:2; color:#F7F5EE; }
+  .rank-side::after{ content:''; position:absolute; inset:0; z-index:1; background:linear-gradient(180deg, transparent 40%, rgba(15,20,27,0.85)); pointer-events:none; }
+  .rank-side-text .eyebrow{ color:#E9A98A; }
+  .rank-side-text p{ position:relative; z-index:2; font-size:0.85rem; margin-top:0.3rem; max-width:22ch; }
+
+  /* ---------- About ---------- */
+  .about-wrap{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:3rem; align-items:center; }
+  @media (max-width:840px){ .about-wrap{ grid-template-columns:1fr; } }
+  .about-visual{ aspect-ratio:4/3; border-radius:6px; box-shadow:0 20px 40px -20px rgba(27,36,48,0.4); background:#2A3341; }
+  .about-copy p{ color:var(--ink-soft); font-size:1rem; line-height:1.75; margin-bottom:1rem; }
+  .about-copy p:first-child{ font-family:'Fraunces',serif; font-size:1.3rem; color:var(--ink); font-style:italic; line-height:1.5; }
+
+  /* ---------- Newsletter ---------- */
+  .newsletter{ position:relative; border-radius:6px; overflow:hidden; padding:clamp(2.5rem,6vw,4rem); display:flex; justify-content:space-between; align-items:center; gap:2rem; flex-wrap:wrap; background:#2A3341; }
+  .newsletter-bg{ position:absolute; inset:0; z-index:0; }
+  .newsletter-bg img{ filter:saturate(0.7) brightness(0.45); }
+  .newsletter::after{ content:''; position:absolute; inset:0; z-index:1; background:rgba(20,20,28,0.35); pointer-events:none; }
+  .newsletter > *:not(.newsletter-bg){ position:relative; z-index:2; }
+  .newsletter h2{ color:#F7F5EE; font-size:clamp(1.6rem,3vw,2.2rem); max-width:16ch; }
+  .newsletter p{ color:rgba(247,245,238,0.75); margin-top:0.6rem; font-size:0.9rem; max-width:34ch; }
+  .newsletter-form{ display:flex; gap:0.6rem; flex-wrap:wrap; }
+  .newsletter-form input{ background:rgba(247,245,238,0.1); border:1px solid rgba(247,245,238,0.35); color:#F7F5EE; padding:0.85rem 1.1rem; border-radius:2px; min-width:220px; font-family:'Inter',sans-serif; transition:border-color 0.25s ease; }
+  .newsletter-form input:focus-visible{ border-color:var(--coral); outline:none; }
+  .newsletter-form input::placeholder{ color:rgba(247,245,238,0.55); }
+  .newsletter-form button{ background:var(--coral); color:#fff; padding:0.85rem 1.4rem; border-radius:2px; font-weight:500; font-size:0.9rem; transition:background 0.2s ease, transform 0.25s var(--ease); }
+  .newsletter-form button:hover{ background:var(--coral-dim); transform:translateY(-2px); }
+  .newsletter-status{ width:100%; font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:#9FD6C0; min-height:1.2em; margin-top:0.4rem; }
+
+  /* ===== Premium motion layer ===== */
+  .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.1em;margin-bottom:-.1em;}
+  html.js .wi{display:inline-block;transform:translateY(130%);transition:transform 1.05s cubic-bezier(.19,1,.22,1);transition-delay:calc(var(--i)*.045s);will-change:transform;}
+  html.js .split.in .wi{transform:translateY(0);}
+  .marquee{overflow:hidden;background:#161D27;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.15rem 0;}
+  .marquee-track{display:flex;width:max-content;animation:mq 38s linear infinite;will-change:transform;}
+  .marquee:hover .marquee-track{animation-play-state:paused;}
+  .marquee-track>span{display:inline-flex;align-items:center;white-space:nowrap;font-family:'Fraunces',serif;font-style:italic;font-size:clamp(1.5rem,3.2vw,2.5rem);color:#F2F1EA;}
+  .mw{margin:0 1.5rem;}
+  .mw.out{color:transparent;-webkit-text-stroke:1px rgba(242,241,234,.75);font-style:normal;}
+  .md{font-style:normal;color:var(--coral);font-size:.55em;}
+  @keyframes mq{to{transform:translateX(-50%)}}
+  nav.scrolled{box-shadow:0 12px 34px -20px rgba(27,36,48,.45);}
+  @media (prefers-reduced-motion: reduce){.marquee-track{animation:none}.wi{transform:none;transition:none}}
+
+  footer{ padding:2.5rem clamp(1.5rem,5vw,3.5rem); display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; border-top:1px solid var(--line); font-size:0.8rem; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace; }
+  footer a:hover{ color:var(--coral); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#top" class="logo"><span class="dot"></span>Otherworld</a>
+  <div class="nav-links">
+    <a href="#arrivals">New Arrivals</a>
+    <a href="#genres">Genres</a>
+    <a href="#rankings">Rankings</a>
+    <a href="#about">About</a>
+    <a href="#newsletter">Newsletter</a>
+  </div>
+  <a href="#arrivals" class="nav-cta">Browse Catalog</a>
+</nav>
+
+<section class="hero" id="top">
+  <div class="hero-bg" id="heroParallax"><img src="images/hero-opt.jpg" alt=""></div>
+  <div class="hero-scrim"></div>
+  <div class="hero-inner">
+    <span class="eyebrow reveal" style="--d:0s">Light Novels · Isekai & Beyond</span>
+    <h1 class="hero-title reveal" style="--d:0.1s">Stories for readers who'd rather be <span class="accent">somewhere else.</span></h1>
+    <p class="sub reveal" style="--d:0.2s">Otherworld is a small press storefront for isekai, fantasy, and slice-of-life light novels — English editions, curated by people who actually read the whole series.</p>
+    <form class="hero-search reveal" style="--d:0.3s" id="searchForm" role="search">
+      <input type="search" id="searchInput" placeholder="Search titles, authors, genres..." aria-label="Search catalog">
+      <button type="submit">Search</button>
+    </form>
+    <div class="hero-stats reveal" style="--d:0.4s">
+      <div><b class="count-up" data-target="340">0</b><span>Titles</span></div>
+      <div><b class="count-up" data-target="58">0</b><span>Publishers</span></div>
+      <div><b class="count-up" data-target="4.7" data-decimal="1">0</b><span>Avg. Rating</span></div>
+    </div>
+  </div>
+  <div class="scroll-cue"></div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span><span class="mw">Isekai</span><span class="md">✦</span><span class="mw out">High Fantasy</span><span class="md">✦</span><span class="mw">Slice of Life</span><span class="md">✦</span><span class="mw out">Villainess</span><span class="md">✦</span><span class="mw">Dungeon Crawl</span><span class="md">✦</span><span class="mw out">Reverse Isekai</span><span class="md">✦</span><span class="mw">Fresh Fridays</span><span class="md">✦</span></span>
+    <span><span class="mw">Isekai</span><span class="md">✦</span><span class="mw out">High Fantasy</span><span class="md">✦</span><span class="mw">Slice of Life</span><span class="md">✦</span><span class="mw out">Villainess</span><span class="md">✦</span><span class="mw">Dungeon Crawl</span><span class="md">✦</span><span class="mw out">Reverse Isekai</span><span class="md">✦</span><span class="mw">Fresh Fridays</span><span class="md">✦</span></span>
+  </div>
+</div>
+
+<section class="block" id="arrivals">
+  <div class="arrivals-banner wipe" style="--d:0s">
+    <img src="images/arrivals-banner-opt.jpg" alt="">
+    <div class="arrivals-banner-text">
+      <span class="eyebrow">Fresh Off the Press</span>
+      <h3>New arrivals this week</h3>
+    </div>
+  </div>
+
+  <div class="block-head reveal">
+    <div><h2>Six titles readers can't stop recommending</h2></div>
+    <p>Hand-picked series, all stocked as English editions. Use the search above to filter.</p>
+  </div>
+
+  <p class="search-status" id="searchStatus" aria-live="polite"></p>
+  <div class="catalog-grid">
+    <div class="book-card reveal" style="--d:0s" tabindex="0">
+      <div class="book-cover wipe" style="--d:0.05s">
+        <img src="images/book-mushoku-cover-opt.jpg" loading="lazy" decoding="async" alt="Cover of the Mushoku Tensei: Jobless Reincarnation light novel">
+        <span class="tag">Isekai · Reincarnation</span>
+        <h3>Mushoku Tensei: Jobless Reincarnation</h3>
+      </div>
+      <div class="book-meta"><span class="author">Rifujin na Magonote</span><span class="price">$14.99</span></div>
+    </div>
+
+    <div class="book-card reveal" style="--d:0.08s" tabindex="0">
+      <div class="book-cover wipe" style="--d:0.13s">
+        <img src="images/book-rezero-cover-opt.jpg" loading="lazy" decoding="async" alt="Cover of the Re:Zero - Starting Life in Another World light novel">
+        <span class="tag">Isekai · Time Loop</span>
+        <h3>Re:Zero − Starting Life in Another World</h3>
+      </div>
+      <div class="book-meta"><span class="author">Tappei Nagatsuki</span><span class="price">$13.99</span></div>
+    </div>
+
+    <div class="book-card reveal" style="--d:0.16s" tabindex="0">
+      <div class="book-cover wipe" style="--d:0.21s">
+        <img src="images/book-realist-hero-cover-opt.jpg" loading="lazy" decoding="async" alt="Cover of the How a Realist Hero Rebuilt the Kingdom light novel">
+        <span class="tag">Isekai · Kingdom Building</span>
+        <h3>How a Realist Hero Rebuilt the Kingdom</h3>
+      </div>
+      <div class="book-meta"><span class="author">Dojyomaru</span><span class="price">$15.99</span></div>
+    </div>
+
+    <div class="book-card reveal" style="--d:0s" tabindex="0">
+      <div class="book-cover wipe" style="--d:0.05s">
+        <img src="images/book-full-clearing-cover-opt.jpg" loading="lazy" decoding="async" alt="Cover of the Full Clearing Another World under a Goddess with Zero Believers light novel">
+        <span class="tag">Isekai · Comedy</span>
+        <h3>Full Clearing Another World Under a Goddess with Zero Believers</h3>
+      </div>
+      <div class="book-meta"><span class="author">Isle Ōsaki</span><span class="price">$13.49</span></div>
+    </div>
+
+    <div class="book-card reveal" style="--d:0.08s" tabindex="0">
+      <div class="book-cover wipe" style="--d:0.13s">
+        <img src="images/book-spirit-chronicles-cover-opt.jpg" loading="lazy" decoding="async" alt="Cover of The Spirit Chronicles light novel">
+        <span class="tag">Fantasy · Reincarnation</span>
+        <h3>The Spirit Chronicles</h3>
+      </div>
+      <div class="book-meta"><span class="author">Yuri Kitayama</span><span class="price">$14.49</span></div>
+    </div>
+
+    <div class="book-card reveal" style="--d:0.16s" tabindex="0">
+      <div class="book-cover wipe" style="--d:0.21s">
+        <img src="images/book-arifureta-cover-opt.jpg" loading="lazy" decoding="async" alt="Cover of the Arifureta: From Commonplace to Worlds Strongest light novel">
+        <span class="tag">Isekai · Action</span>
+        <h3>Arifureta: From Commonplace to World's Strongest</h3>
+      </div>
+      <div class="book-meta"><span class="author">Ryo Shirakome</span><span class="price">$14.99</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="genres">
+  <div class="block-head reveal">
+    <div>
+      <span class="eyebrow">Find Your Next World</span>
+      <h2>Browse by genre</h2>
+    </div>
+    <p>Every shelf, sorted the way readers actually search.</p>
+  </div>
+  <div class="genre-grid">
+    <a class="genre-chip wipe" style="--d:0s" href="#arrivals">
+      <img src="images/genre-isekai-opt.jpg" loading="lazy" decoding="async" alt="">
+      <span class="count">128 titles</span><h3>Isekai &amp; Reincarnation</h3>
+    </a>
+    <a class="genre-chip wipe" style="--d:0.06s" href="#arrivals">
+      <img src="images/genre-fantasy-opt.jpg" loading="lazy" decoding="async" alt="">
+      <span class="count">64 titles</span><h3>High Fantasy</h3>
+    </a>
+    <a class="genre-chip wipe" style="--d:0.12s" href="#arrivals">
+      <img src="images/genre-slice-of-life-opt.jpg" loading="lazy" decoding="async" alt="">
+      <span class="count">41 titles</span><h3>Slice of Life</h3>
+    </a>
+    <a class="genre-chip wipe" style="--d:0s" href="#arrivals">
+      <img src="images/genre-villainess-opt.jpg" loading="lazy" decoding="async" alt="">
+      <span class="count">37 titles</span><h3>Villainess &amp; Romance</h3>
+    </a>
+    <a class="genre-chip wipe" style="--d:0.06s" href="#arrivals">
+      <img src="images/genre-dungeon-opt.jpg" loading="lazy" decoding="async" alt="">
+      <span class="count">29 titles</span><h3>Dungeon &amp; Kingdom Building</h3>
+    </a>
+    <a class="genre-chip wipe" style="--d:0.12s" href="#arrivals">
+      <img src="images/genre-reverse-isekai-opt.jpg" loading="lazy" decoding="async" alt="">
+      <span class="count">22 titles</span><h3>Reverse Isekai</h3>
+    </a>
+  </div>
+</section>
+
+<div class="quote-band wipe">
+  <img src="images/quote-band-opt.jpg" loading="lazy" decoding="async" alt="">
+  <blockquote>"A good isekai doesn't make you wish you were somewhere else. It makes you realize you already are."</blockquote>
+  <cite>— Otherworld Reading Notes, Vol. 12</cite>
+</div>
+
+<section class="block" id="rankings">
+  <div class="block-head reveal">
+    <div>
+      <span class="eyebrow">This Week</span>
+      <h2>Top sellers</h2>
+    </div>
+    <p>Ranked by copies sold across our storefront, updated every Monday.</p>
+  </div>
+  <div class="rankings-wrap">
+    <div class="rank-list reveal">
+      <div class="rank-row top">
+        <span class="rank-num">01</span>
+        <div class="rank-info"><h3>Re:Zero − Starting Life in Another World</h3><div class="author">Tappei Nagatsuki</div></div>
+        <span class="rank-trend">↑ 2</span>
+      </div>
+      <div class="rank-row top">
+        <span class="rank-num">02</span>
+        <div class="rank-info"><h3>Mushoku Tensei: Jobless Reincarnation</h3><div class="author">Rifujin na Magonote</div></div>
+        <span class="rank-trend">— 0</span>
+      </div>
+      <div class="rank-row">
+        <span class="rank-num">03</span>
+        <div class="rank-info"><h3>How a Realist Hero Rebuilt the Kingdom</h3><div class="author">Dojyomaru</div></div>
+        <span class="rank-trend">↑ 1</span>
+      </div>
+      <div class="rank-row">
+        <span class="rank-num">04</span>
+        <div class="rank-info"><h3>Arifureta: From Commonplace to World's Strongest</h3><div class="author">Ryo Shirakome</div></div>
+        <span class="rank-trend">↓ 2</span>
+      </div>
+      <div class="rank-row">
+        <span class="rank-num">05</span>
+        <div class="rank-info"><h3>The Spirit Chronicles</h3><div class="author">Yuri Kitayama</div></div>
+        <span class="rank-trend">↑ 3</span>
+      </div>
+    </div>
+    <div class="rank-side wipe" style="--d:0.1s">
+      <img src="images/rankings-side-opt.jpg" loading="lazy" decoding="async" alt="">
+      <div class="rank-side-text">
+        <span class="eyebrow">Reader Pick</span>
+        <p>"Started Volume 1 on a Sunday, finished the whole series by Wednesday."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="about">
+  <div class="about-wrap">
+    <div class="about-visual wipe">
+      <img src="images/about-store-opt.jpg" loading="lazy" decoding="async" alt="Cozy bookstore interior with stacks of books">
+    </div>
+    <div class="about-copy reveal" style="--d:0.15s">
+      <p>"We built Otherworld because the isekai shelf deserved better curation than an algorithm."</p>
+      <p>Otherworld started as a spreadsheet of light novels three friends kept trading between them. Three years and a few hundred imports later, it's a full storefront — still stocked the same way: by people who finish the series before they recommend it.</p>
+      <p>We work directly with publishers and translators to bring English-language editions to readers who'd otherwise be waiting on fan scans.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="newsletter">
+  <div class="newsletter reveal">
+    <div class="newsletter-bg"><img src="images/newsletter-bg-opt.jpg" loading="lazy" decoding="async" alt=""></div>
+    <div>
+      <h2>New volumes, every Friday</h2>
+      <p>One email a week. New arrivals, restocks, and the occasional preorder before anyone else hears about it.</p>
+    </div>
+    <div style="flex:1; min-width:260px;">
+      <form class="newsletter-form" id="nlForm">
+        <input type="email" placeholder="you@email.com" required aria-label="Email address">
+        <button type="submit">Subscribe</button>
+      </form>
+      <div class="newsletter-status" id="nlStatus"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Otherworld Books — an independent light novel storefront</span>
+  <span><a href="#arrivals">Catalog</a> · <a href="#rankings">Rankings</a> · <a href="#about">About</a></span>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  /* emergency reveal: called if ANY part of the motion layer throws */
+  function revealAll(){var els=document.querySelectorAll(".reveal,.wipe,.split");for(var i=0;i<els.length;i++){els[i].classList.add("in");}}
+  try{
+  var $=function(s){return document.querySelector(s)},$$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+  var reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine=matchMedia("(pointer: fine)").matches;
+
+  /* split headlines into masked words for staggered reveals */
+  var wi=0;
+  function splitWords(el){
+    (function walk(n){Array.prototype.slice.call(n.childNodes).forEach(function(c){
+      if(c.nodeType===3){var fr=document.createDocumentFragment();c.textContent.split(/(\s+)/).forEach(function(p){
+        if(!p)return;if(/^\s+$/.test(p)){fr.appendChild(document.createTextNode(" "));return;}
+        var w=document.createElement("span");w.className="w";var i=document.createElement("span");i.className="wi";
+        i.style.setProperty("--i",wi++);i.textContent=p;w.appendChild(i);fr.appendChild(w);});
+        c.replaceWith(fr);}else if(c.nodeType===1){walk(c);}});})(el);
+    el.classList.add("split");
+  }
+  [$(".hero-title")].concat($$(".block-head h2"),[$(".newsletter h2")]).forEach(function(t){if(t)splitWords(t);});
+
+  /* unified reveal observer (fades, wipes, word masks) — with no-IntersectionObserver fallback */
+  function markIn(el){el.classList.add("in");}
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting){markIn(e.target);io.unobserve(e.target);}});},
+      {threshold:.15,rootMargin:"0px 0px -6% 0px"});
+    $$(".reveal,.wipe,.split").forEach(function(el){io.observe(el)});
+  }else{
+    $$(".reveal,.wipe,.split").forEach(markIn);
+  }
+
+  /* animated counters (final value shown immediately when motion is reduced or IO is missing) */
+  function countUp(el){
+    var t=parseFloat(el.dataset.target),dec=parseInt(el.dataset.decimal||"0",10),st=null;
+    if(reduced){el.textContent=t.toFixed(dec);return;}
+    (function tick(now){if(st===null)st=now;var p=Math.min((now-st)/1400,1);
+      el.textContent=(t*(1-Math.pow(1-p,3))).toFixed(dec);
+      if(p<1)requestAnimationFrame(tick);})(performance.now());
+  }
+  if("IntersectionObserver" in window){
+    var cio=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return;cio.unobserve(e.target);countUp(e.target);});},{threshold:.4});
+    $$(".count-up").forEach(function(el){cio.observe(el)});
+  }else{
+    $$(".count-up").forEach(countUp);
+  }
+
+  /* native scrolling + rAF-driven effects (no scroll hijacking) */
+  var nav=$("nav"),heroInner=$(".hero-inner"),heroImg=$(".hero-bg img");
+  var vh=innerHeight;
+
+  var layers=[[".arrivals-banner img",70],[".quote-band img",90],[".rank-side img",50],
+              [".newsletter-bg img",70],[".about-visual img",40]]
+    .map(function(d){return{amt:d[1],el:$(d[0])};});
+  var spyLinks=$$(".nav-links a"),sections=$$("section[id]");
+
+  function frame(){
+    var y=window.scrollY;
+    if(nav)nav.classList.toggle("scrolled",y>30);
+
+    /* scrollspy against the viewport midline */
+    var mid=y+vh*0.45,best=null;
+    sections.forEach(function(s){var r=s.getBoundingClientRect();if(r.top<=mid&&r.bottom>mid)best=s.id;});
+    spyLinks.forEach(function(a){a.classList.toggle("active",a.getAttribute("href")==="#"+best);});
+
+    if(!reduced){
+      layers.forEach(function(o){if(!o.el)return;
+        var r=o.el.parentElement.getBoundingClientRect();
+        if(r.bottom<-300||r.top>vh+300)return;
+        var p=(r.top+r.height/2-vh/2)/vh;
+        o.el.style.transform="translateY("+(-p*o.amt).toFixed(1)+"px) scale(1.12)";});
+      if(heroImg&&y<vh*2){var t1=Math.min(y/vh,1);
+        heroImg.style.transform="scale("+(1.2-t1*.2).toFixed(3)+")";}
+      if(heroInner&&y<vh){
+        heroInner.style.opacity=Math.max(0,1-y/(vh*.72)).toFixed(3);
+        heroInner.style.transform="translateY("+(y*-0.14).toFixed(1)+"px)";}
+    }
+  }
+  /* only recompute when the page actually scrolls/resizes, at most once per frame */
+  var queued=false;
+  function requestFrame(){if(queued)return;queued=true;requestAnimationFrame(function(){queued=false;frame();});}
+  addEventListener("scroll",requestFrame,{passive:true});
+  addEventListener("resize",function(){vh=innerHeight;requestFrame();});
+  requestFrame();
+
+  /* catalog search: filters the book cards by title, author, or genre tag */
+  var searchForm=$("#searchForm"),searchInput=$("#searchInput"),searchStatus=$("#searchStatus"),cards=$$(".book-card");
+  function clearSearch(){searchInput.value="";runSearch();}
+  function runSearch(){
+    var q=searchInput.value.trim().toLowerCase(),shown=0;
+    cards.forEach(function(c){var hit=!q||c.textContent.toLowerCase().indexOf(q)!==-1;c.hidden=!hit;if(hit){shown++;markIn(c);c.querySelector(".wipe")&&markIn(c.querySelector(".wipe"));}});
+    searchStatus.textContent="";
+    if(!q)return;
+    searchStatus.appendChild(document.createTextNode(shown?shown+" of "+cards.length+" titles match “"+searchInput.value.trim()+"”.":"No titles match “"+searchInput.value.trim()+"”."));
+    var reset=document.createElement("button");reset.type="button";reset.textContent="Show all";reset.addEventListener("click",clearSearch);
+    searchStatus.appendChild(reset);
+  }
+  if(searchForm&&searchInput&&searchStatus){
+    searchForm.addEventListener("submit",function(e){
+      e.preventDefault();runSearch();
+      $("#arrivals").scrollIntoView({behavior:reduced?"auto":"smooth"});});
+    searchInput.addEventListener("search",function(){if(!searchInput.value)runSearch();});
+  }
+
+  /* magnetic buttons */
+  if(fine&&!reduced)$$(".nav-cta,.hero-search button,.newsletter-form button").forEach(function(b){
+    b.style.transition="transform .28s cubic-bezier(.22,1,.36,1)";
+    b.addEventListener("mousemove",function(e){var r=b.getBoundingClientRect();
+      b.style.transform="translate("+((e.clientX-r.left-r.width/2)*.32).toFixed(1)+"px,"+
+        ((e.clientY-r.top-r.height/2)*.32).toFixed(1)+"px)";});
+    b.addEventListener("mouseleave",function(){b.style.transform="";});});
+
+  /* 3D tilt cards */
+  if(fine&&!reduced)$$(".book-card,.genre-chip").forEach(function(c){
+    c.addEventListener("mousemove",function(e){
+      if(!c.classList.contains("in"))return;
+      var r=c.getBoundingClientRect(),
+          px=(e.clientX-r.left)/r.width-.5,
+          py=(e.clientY-r.top)/r.height-.5,
+          lift=c.classList.contains("genre-chip")?-6:0;
+      c.style.transition="transform .08s linear";
+      c.style.transform="perspective(900px) rotateX("+(-py*9).toFixed(2)+"deg) rotateY("+(px*11).toFixed(2)+"deg) translateY("+lift+"px)";});
+    c.addEventListener("mouseleave",function(){
+      c.style.transition="transform .8s cubic-bezier(.19,1,.22,1)";
+      c.style.transform="";});});
+
+  /* newsletter */
+  var nlForm=$("#nlForm"); if(nlForm)nlForm.addEventListener("submit",function(e){
+    e.preventDefault();
+    document.getElementById("nlStatus").textContent="You're subscribed. First email lands Friday.";
+    this.reset();});
+  }catch(err){ if(window.console&&console.warn)console.warn("Otherworld motion layer skipped:",err); revealAll(); }
+})();
+</script>
+<script>
+/* independent failsafe: no matter what happens above, nothing stays hidden longer than 2s */
+setTimeout(function(){
+  var els=document.querySelectorAll(".reveal:not(.in),.wipe:not(.in),.split:not(.in)");
+  for(var i=0;i<els.length;i++)els[i].classList.add("in");
+},2000);
+</script>
+
+</body>
+</html>
