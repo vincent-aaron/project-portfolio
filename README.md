@@ -13,14 +13,15 @@ The personal portfolio website of **Vincent Aaron B. Vicente**, a developer from
 
 ## Featured Projects
 
-| Project | Stack | Repository |
-| --- | --- | --- |
-| Tech IMS | Python, Django, PostgreSQL | [tech-ims](https://github.com/vincent-aaron/tech-ims) |
-| Barangay Adjudication MIS | PHP, MySQL, JavaScript | [barangay-adjudication-mis](https://github.com/vincent-aaron/barangay-adjudication-mis) |
-| Runebound | Unity, C# | [runebound](https://github.com/vincent-aaron/runebound) |
-| Titan Cruise | Java, Swing, Maven | [titan-cruise](https://github.com/vincent-aaron/titan-cruise) |
-| Elevating IQ | Java, Swing | [elevating-iq](https://github.com/vincent-aaron/elevating-iq) |
-| Simple Calc | Java, Swing | [simple-calc](https://github.com/vincent-aaron/simple-calc) |
+| Project | Stack | Repository | Live |
+| --- | --- | --- | --- |
+| Electro Galaxy | Next.js, TypeScript, Supabase | [electro-galaxy](https://github.com/vincent-aaron/electro-galaxy) | [electro-galaxy.vercel.app](https://electro-galaxy.vercel.app) |
+| Tech IMS | Python, Django, PostgreSQL | [tech-ims](https://github.com/vincent-aaron/tech-ims) | [tech-ims-azure.vercel.app](https://tech-ims-azure.vercel.app) |
+| Barangay Adjudication MIS | PHP, MySQL, JavaScript | [barangay-adjudication-mis](https://github.com/vincent-aaron/barangay-adjudication-mis) | [Live demo](https://bp4mis.liveblog365.com/bpamis_website/bpamis.php) |
+| Runebound | Unity, C# | [runebound](https://github.com/vincent-aaron/runebound) | [itch.io](https://zil30.itch.io/rune-bound) |
+| Titan Cruise | Java, Swing, Maven | [titan-cruise](https://github.com/vincent-aaron/titan-cruise) | – |
+| Elevating IQ | Java, Swing | [elevating-iq](https://github.com/vincent-aaron/elevating-iq) | – |
+| Simple Calc | Java, Swing | [simple-calc](https://github.com/vincent-aaron/simple-calc) | – |
 
 ## Tech Stack
 
