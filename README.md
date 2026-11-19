@@ -31,7 +31,7 @@ All project content lives in the `PROJECTS` array near the top of the `<script>`
 index.html
 assets/
   Vicente_Vincent_Aaron_Resume.pdf
-  profile.jpg
+  profile-1710.jpg
   one screenshot or cover image per project
 ignition/     # Ignition showroom concept, live at /ignition/
 otherworld/   # Otherworld Books concept, live at /otherworld/
